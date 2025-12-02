@@ -2,584 +2,512 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الاختبارات الذكية - اللغة العربية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4f46e5">
+    <title>منصة التميز - امتحان اللغة العربية 2026 (80 سؤال)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4f46e5; /* نيلي عصري */
+            --primary: #4f46e5;
             --primary-dark: #3730a3;
-            --accent: #f59e0b; /* برتقالي ذهبي */
             --bg-body: #f3f4f6;
             --bg-sidebar: #ffffff;
+            --bg-card: #ffffff;
             --text-main: #1f2937;
             --text-light: #6b7280;
-            --success: #10b981;
-            --danger: #ef4444;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --border: #e5e7eb;
+            --hover: #f9fafb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --success-bg: #d1fae5;
+            --success-text: #064e3b;
+            --error-bg: #fee2e2;
+            --error-text: #991b1b;
         }
 
-        * { box-sizing: border-box; transition: all 0.2s ease-in-out; }
+        body.dark-mode {
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
+            --bg-body: #111827;
+            --bg-sidebar: #1f2937;
+            --bg-card: #374151;
+            --text-main: #f9fafb;
+            --text-light: #d1d5db;
+            --border: #374151;
+            --hover: #4b5563;
+            --success-bg: #064e3b;
+            --success-text: #d1fae5;
+            --error-bg: #7f1d1d;
+            --error-text: #fee2e2;
+        }
+
+        * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s; }
         
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: var(--bg-body);
+            color: var(--text-main);
             margin: 0;
             height: 100vh;
             display: flex;
-            overflow: hidden; /* لمنع السكرول في الجسم الرئيسي */
-            color: var(--text-main);
+            overflow: hidden;
         }
 
-        /* --- Layout --- */
-        .app-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* --- Sidebar (Navigation) --- */
+        /* Sidebar */
         .sidebar {
             width: 280px;
             background: var(--bg-sidebar);
-            border-left: 1px solid #e5e7eb;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            z-index: 10;
+            border-left: 1px solid var(--border);
+            display: flex; flex-direction: column; padding: 20px; z-index: 10;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.05);
         }
 
         .brand {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.4rem; font-weight: 900; color: var(--primary);
+            margin-bottom: 25px; display: flex; align-items: center; gap: 10px;
         }
 
-        .nav-items {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        .nav-items { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
 
         .nav-btn {
-            background: transparent;
-            border: none;
-            padding: 12px 15px;
-            border-radius: 10px;
-            text-align: right;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-light);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            background: transparent; border: none; padding: 12px 15px;
+            border-radius: 12px; text-align: right; font-family: inherit;
+            font-size: 0.95rem; font-weight: 500; color: var(--text-light);
+            cursor: pointer; display: flex; align-items: center; gap: 12px;
         }
 
-        .nav-btn:hover { background: #f9fafb; color: var(--primary); transform: translateX(-5px); }
-        
+        .nav-btn:hover { background: var(--hover); color: var(--primary); }
         .nav-btn.active {
-            background: #eef2ff;
-            color: var(--primary);
-            font-weight: 700;
-            border-right: 4px solid var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white; font-weight: 700;
         }
 
-        .timer-box {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-        }
+        .sidebar-footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 15px; }
         
-        .timer-val { font-size: 1.5rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+        .timer-box {
+            background: var(--bg-card); border: 2px solid var(--primary);
+            color: var(--primary); padding: 10px; border-radius: 12px;
+            text-align: center; font-weight: 800; font-size: 1.2rem;
+        }
 
-        /* --- Main Content --- */
+        .theme-toggle {
+            background: var(--hover); border: 1px solid var(--border);
+            color: var(--text-main); padding: 10px; border-radius: 10px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        /* Main Content */
         .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            position: relative;
-            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            flex: 1; padding: 30px; overflow-y: auto; position: relative;
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
             background-size: 20px 20px;
         }
 
-        .section-container {
-            display: none; /* Hide all initially */
-            max-width: 900px;
-            margin: 0 auto;
-            animation: fadeIn 0.4s ease;
-        }
+        .section-container { max-width: 900px; margin: 0 auto; display: none; animation: slideUp 0.4s; }
+        .section-container.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-header { margin-bottom: 30px; }
+        .section-title { font-size: 2rem; font-weight: 900; margin: 0; }
         
-        .section-container.active-section { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .section-header {
-            margin-bottom: 25px;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 15px;
-        }
-
-        .section-title { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin: 0; }
-        .section-subtitle { color: var(--text-light); font-size: 0.9rem; margin-top: 5px; }
-
-        /* --- Question Cards --- */
         .q-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.02);
+            background: var(--bg-card); border-radius: 16px; padding: 25px;
+            margin-bottom: 25px; box-shadow: var(--shadow); border: 1px solid var(--border);
+            position: relative;
         }
 
-        .q-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        .q-num {
+            position: absolute; top: 20px; left: 20px; background: var(--hover);
+            color: var(--text-light); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;
+        }
 
-        .q-text { font-size: 1.15rem; font-weight: 700; margin-bottom: 20px; line-height: 1.6; }
+        .q-text { font-size: 1.2rem; font-weight: 700; margin-bottom: 25px; line-height: 1.6; padding-left: 40px; }
 
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media (max-width: 768px) { .options-grid { grid-template-columns: 1fr; } }
 
         .option-label {
-            background: #f9fafb;
-            border: 2px solid transparent;
-            padding: 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
+            background: var(--bg-body); border: 2px solid transparent; padding: 15px;
+            border-radius: 12px; cursor: pointer; display: flex; align-items: center;
         }
 
-        .option-label:hover { background: #eff6ff; border-color: #bfdbfe; }
-        .option-label.selected { background: #eef2ff; border-color: var(--primary); color: var(--primary); font-weight: 700; }
-        
-        .circle-check {
-            width: 20px; height: 20px; border-radius: 50%; border: 2px solid #d1d5db;
-            margin-left: 10px; display: flex; align-items: center; justify-content: center;
-        }
-        .option-label.selected .circle-check { background: var(--primary); border-color: var(--primary); }
-        .option-label.selected .circle-check::after { content: '✓'; color: white; font-size: 12px; }
+        .option-label:hover { border-color: var(--primary); }
+        .option-label.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* --- Passage Design --- */
+        .check-circle {
+            width: 22px; height: 22px; border-radius: 50%; border: 2px solid #9ca3af;
+            margin-left: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        }
+        .option-label.selected .check-circle { border-color: white; background: white; color: var(--primary); }
+        .option-label.selected .check-circle::after { content: '✔'; font-size: 12px; font-weight: bold; }
+
         .passage-box {
-            background: #fffbeb;
-            border-right: 5px solid var(--accent);
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #78350f;
-            position: relative;
+            background: #fffbeb; color: #92400e; border-right: 4px solid #f59e0b;
+            padding: 20px; border-radius: 12px; margin-bottom: 30px; line-height: 1.8;
         }
-        .passage-icon { position: absolute; top: -15px; left: 20px; font-size: 2rem; background: #fffbeb; padding: 5px; border-radius: 50%; }
+        body.dark-mode .passage-box { background: #451a03; color: #fcd34d; border-color: #fbbf24; }
 
-        /* --- Footer Actions --- */
-        .action-bar {
-            margin-top: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 10px; font-weight: bold; display: none; }
+        .feedback.correct { background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-text); }
+        .feedback.wrong { background: var(--error-bg); color: var(--error-text); border: 1px solid var(--error-text); }
 
-        .btn {
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .action-bar { display: flex; justify-content: space-between; margin-top: 40px; }
+        .btn { padding: 15px 35px; border-radius: 50px; font-weight: 700; border: none; cursor: pointer; font-size: 1rem; }
+        .btn-next { background: var(--text-main); color: var(--bg-card); }
+        .btn-submit { background: var(--success-text); color: white; width: 100%; font-size: 1.2rem; }
 
-        .btn-next { background: var(--text-main); color: white; }
-        .btn-next:hover { background: black; }
-        
-        .btn-submit { 
-            background: linear-gradient(135deg, #059669, #10b981); 
-            color: white; 
-            padding: 15px 50px;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-        }
-        .btn-submit:hover { transform: scale(1.05); }
-
-        /* --- Feedback --- */
-        .feedback { margin-top: 15px; padding: 10px; border-radius: 8px; font-weight: bold; display: none; }
-        .correct-ans { background: #d1fae5; color: #064e3b; border: 1px solid #34d399; }
-        .wrong-ans { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
-
-        /* --- Modal --- */
+        /* Modal */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 100;
-            display: none; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.85); z-index: 100; display: none;
+            justify-content: center; align-items: center; backdrop-filter: blur(8px);
         }
         .modal-content {
-            background: white; padding: 40px; border-radius: 20px; text-align: center; width: 90%; max-width: 450px;
-            animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--bg-card); padding: 40px; border-radius: 24px; text-align: center;
+            width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; color: var(--text-main);
         }
-        @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* Mobile Responsive */
+        .chart-container { margin: 30px 0; display: flex; flex-direction: column; gap: 15px; }
+        .chart-row { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+        .chart-bar-bg { flex: 1; height: 12px; background: var(--border); border-radius: 10px; overflow: hidden; }
+        .chart-bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 1s ease; }
+
         @media (max-width: 768px) {
-            .app-container { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; align-items: center; border-bottom: 1px solid #e5e7eb; border-left: none; }
-            .brand { display: none; }
-            .nav-items { flex-direction: row; gap: 5px; }
-            .nav-btn { padding: 8px 12px; font-size: 0.9rem; white-space: nowrap; border-radius: 20px; background: #f3f4f6; }
-            .nav-btn.active { background: var(--primary); color: white; border: none; }
-            .timer-box { position: fixed; bottom: 10px; left: 10px; padding: 5px 15px; font-size: 0.8rem; z-index: 50; width: auto; margin: 0; }
-            .timer-val { font-size: 1rem; }
-            .main-content { padding-bottom: 80px; }
+            .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; flex-direction: row; padding: 10px; border-top: 1px solid var(--border); border-left: none; }
+            .brand, .sidebar-footer, .nav-btn span { display: none; }
+            .nav-items { flex-direction: row; align-items: center; justify-content: space-around; }
+            .nav-btn { padding: 10px; font-size: 1.2rem; justify-content: center; }
+            .main-content { padding-bottom: 90px; }
+            .timer-box { position: fixed; top: 10px; left: 10px; font-size: 0.9rem; padding: 5px 10px; z-index: 50; }
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <aside class="sidebar">
-        <div class="brand">
-            <span>🎓</span>
-            <span>الامتحان الشامل</span>
-        </div>
-        
-        <div class="nav-items" id="navContainer">
-            </div>
+<aside class="sidebar">
+    <div class="brand"><span>🚀 التميز</span></div>
+    <div class="nav-items" id="navContainer"></div>
+    <div class="sidebar-footer">
+        <div class="timer-box" id="timer">03:00:00</div>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <span id="themeIcon">🌙</span> <span>الوضع الليلي</span>
+        </button>
+    </div>
+</aside>
 
-        <div class="timer-box">
-            <div style="font-size:0.8rem; opacity:0.8; margin-bottom:5px;">الوقت المتبقي</div>
-            <div class="timer-val" id="timer">03:00:00</div>
-        </div>
-    </aside>
-
-    <main class="main-content" id="mainContent">
-        </main>
-</div>
+<main class="main-content" id="mainContent"></main>
 
 <div class="modal-overlay" id="resultModal">
     <div class="modal-content">
-        <div style="font-size: 4rem; margin-bottom: 10px;">🏆</div>
-        <h2 style="margin: 0; color: var(--primary);">تم الانتهاء بنجاح!</h2>
-        <div style="font-size: 3.5rem; font-weight: 800; color: var(--text-main); margin: 20px 0;" id="finalScore">0</div>
-        <p id="scoreMsg" style="color: var(--text-light);">...</p>
-        <button class="btn btn-submit" onclick="location.reload()" style="width:100%; justify-content:center;">محاولة جديدة</button>
+        <h2 style="color: var(--primary); margin: 0;">تقرير الأداء النهائي</h2>
+        <div style="font-size: 4rem; font-weight: 900; margin: 10px 0;" id="finalScore">0</div>
+        <p id="scoreMsg" style="color: var(--text-light); margin-bottom: 20px;">...</p>
+        <div class="chart-container" id="analyticsChart"></div>
+        <button class="btn btn-submit" onclick="location.reload()">إعادة الامتحان</button>
     </div>
 </div>
 
 <script>
-    // --- 1. قاعدة البيانات (تم تنظيمها حسب الأقسام) ---
-    // قمت بترتيب الأسئلة لتظهر في أقسام منطقية بدلاً من قائمة واحدة
-    const examData = [
-        {
-            type: "passage", section: "Reading", title: "القراءة المتحررة", icon: "📖",
-            content: `
-                <div class="passage-box">
-                    <span class="passage-icon">🤖</span>
-                    <strong>مقال: الذكاء الاصطناعي والهوية</strong><br>
-                    "إن قضية الهوية في عصر الذكاء الاصطناعي لم تعد مجرد ترف فكري، بل باتت تحدياً وجودياً. 
-                    فبينما تتطور الخوارزميات لتحاكي السلوك البشري، يبرز السؤال: ما الذي يتبقى للإنسان؟ 
-                    يرى البعض أن الخطر ليس في أن يفكر الروبوت كالإنسان، بل في أن يفكر الإنسان كالروبوت؛ 
-                    أي أن يفقد قدرته على التخيل والدهشة."
-                </div>`
-        },
+    const sections = [
+        {id:'Reading', icon:'📖', name:'القراءة المتحررة'},
+        {id:'Lit', icon:'📜', name:'النصوص والأدب'},
+        {id:'G1', icon:'✍️', name:'الوحدة 1: الإملاء'},
+        {id:'G2', icon:'⚙️', name:'الوحدة 2: المشتقات'},
+        {id:'G3', icon:'🔄', name:'الوحدة 3: النواسخ'},
+        {id:'G4', icon:'🚩', name:'الوحدة 4: المنصوبات'},
+        {id:'G5', icon:'🏃', name:'الوحدة 5: الأفعال'},
+        {id:'G6', icon:'🚫', name:'الأدوات والصرف'},
+        {id:'Gen', icon:'🧠', name:'مراجعة شاملة'}
+    ];
+
+    const rawData = [
+        // --- Reading (6 Qs) ---
+        { type: "passage", section: "Reading", content: `<div class="passage-box"><strong>مقال: الذكاء الاصطناعي والهوية</strong><br>"إن قضية الهوية في عصر الذكاء الاصطناعي لم تعد مجرد ترف فكري، بل باتت تحدياً وجودياً..."</div>` },
         { section: "Reading", q: "الفكرة الرئيسة للفقرة السابقة هي:", options: ["تطور الخوارزميات", "تهديد الذكاء الاصطناعي للهوية", "فوائد العولمة", "تاريخ الروبوتات"], a: 1 },
         { section: "Reading", q: "المقصود بعبارة 'أن يفكر الإنسان كالروبوت':", options: ["أن يصبح ذكياً جداً", "أن يفقد المشاعر والخيال", "أن يعتمد على التكنولوجيا", "أن يتطور جسدياً"], a: 1 },
-        { section: "Reading", q: "علاقة جملة 'أي أن يفقد قدرته على التخيل' بما قبلها:", options: ["تعليل", "نتيجة", "توضيح", "استدراك"], a: 2 },
+        { section: "Reading", q: "علاقة جملة 'أي أن يفقد قدرته على التخيل' بما قبلها:", options: ["تعليل", "نتيجة", "توضيح وتفسير", "استدراك"], a: 2 },
         { section: "Reading", q: "العنوان الأنسب للمقال:", options: ["مستقبل البرمجة", "الإنسان والآلة", "فوائد التكنولوجيا", "تاريخ الذكاء الاصطناعي"], a: 1 },
+        { section: "Reading", q: "يرى الكاتب أن الحفاظ على الهوية:", options: ["أمر ثانوي", "تحدٍ وجودي", "مستحيل", "سهل"], a: 1 },
+        { section: "Reading", q: "الخطر الحقيقي من وجهة نظر الكاتب:", options: ["ذكاء الآلة", "تحول الإنسان لآلة", "سرعة الإنترنت", "غياب المعلومات"], a: 1 },
 
-        {
-            type: "passage", section: "Literature_Texts", title: "النصوص والأدب", icon: "📜",
-            content: `
-                <div class="passage-box" style="background:#f3e8ff; border-color:#9333ea; color:#581c87;">
-                    <span class="passage-icon">✒️</span>
-                    <strong>نص شعري: مدرسة أبولو (إبراهيم ناجي)</strong><br>
-                    ذَوَتِ الصَّبَابَةُ وَانْطَوَتْ .. وَفَرَغْتُ مِنْ آلامِهَا<br>
-                    وَعَادَتْ إِلَيَّ الذِّكْرَيَاتُ .. بِحَشْدِهَا وَزِحَامِهَا
-                </div>`
-        },
-        { section: "Literature_Texts", q: "مرادف كلمة 'ذوت' في البيت الأول:", options: ["اشتعلت", "ذبلت وضعفت", "قويت", "استمرت"], a: 1 },
-        { section: "Literature_Texts", q: "السمة الفنية لمدرسة أبولو الظاهرة هنا:", options: ["الاستعمال الجديد للغة", "الاهتمام بالتاريخ", "الذهنية الجافة", "الذاتية والحنين"], a: 3 },
-        { section: "Literature_Texts", q: "من تلاميذ البارودي:", options: ["العقاد", "أحمد شوقي", "إبراهيم ناجي", "جبران"], a: 1 },
-        { section: "Literature_Texts", q: "رائد الاتجاه الوجداني هو:", options: ["خليل مطران", "شكري", "البارودي", "محرم"], a: 0 },
-        { section: "Literature_Texts", q: "مدرسة دعت للتجديد وتأثرت بالثقافة الإنجليزية:", options: ["الإحياء والبعث", "أبولو", "الديوان", "المهاجر"], a: 2 },
+        // --- Literature (8 Qs) ---
+        { type: "passage", section: "Lit", content: `<div class="passage-box"><strong>نص شعري: مدرسة أبولو (إبراهيم ناجي)</strong><br>ذَوَتِ الصَّبَابَةُ وَانْطَوَتْ .. وَفَرَغْتُ مِنْ آلامِهَا</div>` },
+        { section: "Lit", q: "مرادف كلمة 'ذوت' في البيت الأول:", options: ["اشتعلت", "ذبلت وضعفت", "قويت", "استمرت"], a: 1 },
+        { section: "Lit", q: "السمة الفنية لمدرسة أبولو الظاهرة هنا:", options: ["الاستعمال الجديد للغة", "الاهتمام بالتاريخ", "الذهنية الجافة", "الذاتية والحنين"], a: 3 },
+        { section: "Lit", q: "من تلاميذ البارودي:", options: ["العقاد", "أحمد شوقي", "إبراهيم ناجي", "جبران"], a: 1 },
+        { section: "Lit", q: "رائد الاتجاه الوجداني هو:", options: ["خليل مطران", "شكري", "البارودي", "محرم"], a: 0 },
+        { section: "Lit", q: "مدرسة دعت للتجديد وتأثرت بالثقافة الإنجليزية:", options: ["الإحياء والبعث", "أبولو", "الديوان", "المهاجر"], a: 2 },
+        { section: "Lit", q: "يعيب شعراء الديوان على الإحيائيين:", options: ["الاهتمام بالذات", "طغيان الجانب البياني", "الوحدة العضوية", "الذهنية"], a: 1 },
+        { section: "Lit", q: "من مآخذ الديوان على الإحيائيين:", options: ["الاهتمام بقشور الأشياء", "الصدق الفني", "الوحدة العضوية", "الذهنية"], a: 0 },
+        { section: "Lit", q: "المدرسة التي جعلت شعرها غارقاً في الذهنية:", options: ["الديوان", "أبولو", "المهاجر", "الواقعية"], a: 0 },
 
-        // Grammar Unit 1
-        { section: "Grammar_1", title: "النحو: النطق والإملاء", icon: "✍️", q: "أي الجمل التالية صحيحة إملائياً؟", options: ["أشرقت الشمس وإستيقظ الناس", "أشرقت الشمس واستيقظ الناس", "أشرقت الشمس وإستيقذ الناس", "أشرقت الشمس وإستيقظ الناس"], a: 1 },
-        { section: "Grammar_1", q: "كلمة (امرؤ) تكتب في حالة النصب:", options: ["امرؤاً", "امرءاً", "امراً", "امرأً"], a: 3 },
-        { section: "Grammar_1", q: "الفرق بين (ثَمّ) و (ثُمّ):", options: ["ظرف مكان - حرف عطف", "حرف عطف - ظرف مكان", "كلاهما ظرف", "كلاهما حرف"], a: 0 },
-        
-        // Grammar Unit 2
-        { section: "Grammar_2", title: "النحو: المشتقات والمصادر", icon: "⚙️", q: "أمُعطٍ المعلمُ الطلابَ جوائزَ؟ إعراب (الطلاب):", options: ["مضاف إليه", "مفعول به أول", "فاعل", "مفعول به ثان"], a: 1 },
-        { section: "Grammar_2", q: "اسم المفعول من الفعل (قال):", options: ["مقول", "مقال", "مقوول", "قائل"], a: 0 },
-        { section: "Grammar_2", q: "كن (الأعلى) همة. عند خطاب جمع المؤنث:", options: ["كن الأعلات", "كن العليات", "كن الأعليات", "كن العاليين"], a: 1 },
-        { section: "Grammar_2", q: "(مجتمع) الطلاب في المدرسة. كلمة مجتمع هنا:", options: ["اسم مكان", "اسم زمان", "اسم مفعول", "مصدر ميمي"], a: 0 },
-        { section: "Grammar_2", q: "المصدر الصناعي من كلمة (إنسان):", options: ["إنسانية", "أناس", "إنس", "تأنيس"], a: 0 },
-        { section: "Grammar_2", q: "اسم الآلة الجامد فيما يلي:", options: ["منشار", "مبرد", "سيف", "غسالة"], a: 2 },
-        { section: "Grammar_2", q: "صيغة المبالغة من (أقدم):", options: ["قدوم", "مقدام", "قادم", "مقدم"], a: 1 },
+        // --- G1 (5 Qs) ---
+        { section: "G1", q: "أي الجمل التالية صحيحة إملائياً؟", options: ["أشرقت الشمس وإستيقظ الناس", "أشرقت الشمس واستيقظ الناس", "أشرقت الشمس وإستيقذ الناس", "أشرقت الشمس وإستيقظ الناس"], a: 1 },
+        { section: "G1", q: "كلمة (امرؤ) تكتب في حالة النصب:", options: ["امرؤاً", "امرءاً", "امراً", "امرأً"], a: 3 },
+        { section: "G1", q: "الفرق بين (ثَمّ) و (ثُمّ):", options: ["ظرف مكان - حرف عطف", "حرف عطف - ظرف مكان", "كلاهما ظرف", "كلاهما حرف"], a: 0 },
+        { section: "G1", q: "ترسم الهمزة المتوسطة على نبرة إذا كانت:", options: ["مفتوحة بعد فتح", "مكسورة أو ما قبلها مكسور", "مضمومة بعد فتح", "ساكنة بعد ضم"], a: 1 },
+        { section: "G1", q: "نوع (ال) في كلمتي: (الليل - العمل):", options: ["شمسية - قمرية", "قمرية - شمسية", "شمسية - شمسية", "قمرية - قمرية"], a: 0 },
 
-        // Grammar Unit 3
-        { section: "Grammar_3", title: "النحو: النواسخ", icon: "🔄", q: "لولا العلمُ لضاع الناس. الخبر المحذوف تقديره:", options: ["موجود", "كائن", "واجب", "ضروري"], a: 0 },
-        { section: "Grammar_3", q: "أوشك القطار أن يصل. حكم اقتران الخبر بأن:", options: ["يجب", "يمتنع", "يقل", "يكثر"], a: 3 },
-        { section: "Grammar_3", q: "إنما المصريون متحدون. عند حذف (ما) تصبح:", options: ["إن المصريون متحدون", "إن المصريين متحدون", "إن المصريين متحدين", "إن المصريون متحدين"], a: 1 },
-        { section: "Grammar_3", q: "لا متقناً عملَه مذموم. اسم لا نوعه:", options: ["مفرد", "مضاف", "شبيه بالمضاف", "علم"], a: 2 },
-        { section: "Grammar_3", q: "أخذ الطالب الكتاب. أخذ الطالب يقرأ. إعراب الطالب:", options: ["فاعل - فاعل", "اسم أخذ - فاعل", "فاعل - اسم أخذ", "اسم أخذ - اسم أخذ"], a: 2 },
+        // --- G2 (9 Qs) ---
+        { section: "G2", q: "أمُعطٍ المعلمُ الطلابَ جوائزَ؟ إعراب (الطلاب):", options: ["مضاف إليه", "مفعول به أول", "فاعل", "مفعول به ثان"], a: 1 },
+        { section: "G2", q: "اسم المفعول من الفعل (قال):", options: ["مقول", "مقال", "مقوول", "قائل"], a: 0 },
+        { section: "G2", q: "كن (الأعلى) همة. عند خطاب جمع المؤنث:", options: ["كن الأعلات", "كن العليات", "كن الأعليات", "كن العاليين"], a: 1 },
+        { section: "G2", q: "(مجتمع) الطلاب في المدرسة. كلمة مجتمع هنا:", options: ["اسم مكان", "اسم زمان", "اسم مفعول", "مصدر ميمي"], a: 0 },
+        { section: "G2", q: "المصدر الصناعي من كلمة (إنسان):", options: ["إنسانية", "أناس", "إنس", "تأنيس"], a: 0 },
+        { section: "G2", q: "اسم الآلة الجامد فيما يلي:", options: ["منشار", "مبرد", "سيف", "غسالة"], a: 2 },
+        { section: "G2", q: "صيغة المبالغة من (أقدم):", options: ["قدوم", "مقدام", "قادم", "مقدم"], a: 1 },
+        { section: "G2", q: "بناء الفعل للمجهول من (باع):", options: ["بُيع", "بِيع", "بُوع", "بَاع"], a: 1 },
+        { section: "G2", q: "الاسم المنقوص تحذف ياؤه إذا كان:", options: ["نكرة مرفوعة أو مجرورة", "نكرة منصوبة", "معرفة بأل", "مضافاً"], a: 0 },
 
-        // Grammar Unit 4
-        { section: "Grammar_4", title: "النحو: المنصوبات", icon: "🚩", q: "ضربت اللص (ضرباً). المفعول المطلق هنا:", options: ["مؤكد للفعل", "مبين للنوع", "مبين للعدد", "نائب عنه"], a: 0 },
-        { section: "Grammar_4", q: "استيقظت و(طلوعَ) الفجر. إعراب طلوع:", options: ["مفعول به", "مفعول معه", "معطوف", "حال"], a: 1 },
-        { section: "Grammar_4", q: "عاد الطلاب (مسرورين). الحال هنا:", options: ["مفردة", "جملة", "شبه جملة", "مصدر"], a: 0 },
-        { section: "Grammar_4", q: "ازداد الجو (حرارة). إعراب حرارة:", options: ["مفعول به", "حال", "تمييز", "مضاف إليه"], a: 2 },
-        { section: "Grammar_4", q: "ما فاز إلا (المجتهدون). إعراب المجتهدون:", options: ["مستثنى منصوب", "بدل", "فاعل", "مبتدأ"], a: 2 },
-        { section: "Grammar_4", q: "يا (مصريون) اتحدوا. نوع المنادى:", options: ["نكرة مقصودة", "نكرة غير مقصودة", "مضاف", "علم"], a: 0 },
+        // --- G3 (7 Qs) ---
+        { section: "G3", q: "لولا العلمُ لضاع الناس. الخبر المحذوف تقديره:", options: ["موجود", "كائن", "واجب", "ضروري"], a: 0 },
+        { section: "G3", q: "أوشك القطار أن يصل. حكم اقتران الخبر بأن:", options: ["يجب", "يمتنع", "يقل", "يكثر"], a: 3 },
+        { section: "G3", q: "إنما المصريون متحدون. عند حذف (ما) تصبح:", options: ["إن المصريون متحدون", "إن المصريين متحدون", "إن المصريين متحدين", "إن المصريون متحدين"], a: 1 },
+        { section: "G3", q: "لا متقناً عملَه مذموم. اسم لا نوعه:", options: ["مفرد", "مضاف", "شبيه بالمضاف", "علم"], a: 2 },
+        { section: "G3", q: "أخذ الطالب الكتاب. أخذ الطالب يقرأ. إعراب الطالب:", options: ["فاعل - فاعل", "اسم أخذ - فاعل", "فاعل - اسم أخذ", "اسم أخذ - اسم أخذ"], a: 2 },
+        { section: "G3", q: "ظننتك مجتهداً. المفعول الأول هو:", options: ["التاء", "الكاف", "مجتهداً", "ضمير مستتر"], a: 1 },
+        { section: "G3", q: "كسرت همزة إن في (ألا إن) لأنها:", options: ["بعد ألا الاستفتاحية", "أول الكلام", "جواب القسم", "بعد القول"], a: 0 },
 
-        // Grammar Unit 5
-        { section: "Grammar_5", title: "النحو: الأفعال", icon: "🏃", q: "من يجتهدْ (يسمُ) قدره. علامة جزم (يسم):", options: ["السكون", "حذف النون", "حذف حرف العلة", "الضمة"], a: 2 },
-        { section: "Grammar_5", q: "لا تهمل فتندم. الفاء هنا:", options: ["فاء السببية", "فاء الجزاء", "فاء العطف", "فاء الاستئناف"], a: 0 },
-        { section: "Grammar_5", q: "متى تسع للخير (فالنجاح حليفك). اقترن الجواب بالفاء لأنه:", options: ["جملة فعلية طلبية", "جملة اسمية", "مبدوء بـ قد", "مبدوء بـ سوف"], a: 1 },
-        { section: "Grammar_5", q: "والله (لينتصرن) الحق. الفعل المضارع:", options: ["مرفوع", "منصوب", "مبني على الفتح", "مبني على السكون"], a: 2 },
-        { section: "Grammar_5", q: "استقم (تسترح). إعراب تسترح:", options: ["مجزوم في جواب الشرط", "مجزوم في جواب الطلب", "منصوب", "مرفوع"], a: 1 },
+        // --- G4 (8 Qs) ---
+        { section: "G4", q: "ضربت اللص (ضرباً). المفعول المطلق هنا:", options: ["مؤكد للفعل", "مبين للنوع", "مبين للعدد", "نائب عنه"], a: 0 },
+        { section: "G4", q: "استيقظت و(طلوعَ) الفجر. إعراب طلوع:", options: ["مفعول به", "مفعول معه", "معطوف", "حال"], a: 1 },
+        { section: "G4", q: "عاد الطلاب (مسرورين). الحال هنا:", options: ["مفردة", "جملة", "شبه جملة", "مصدر"], a: 0 },
+        { section: "G4", q: "ازداد الجو (حرارة). إعراب حرارة:", options: ["مفعول به", "حال", "تمييز", "مضاف إليه"], a: 2 },
+        { section: "G4", q: "ما فاز إلا (المجتهدون). إعراب المجتهدون:", options: ["مستثنى منصوب", "بدل", "فاعل", "مبتدأ"], a: 2 },
+        { section: "G4", q: "يا (مصريون) اتحدوا. نوع المنادى:", options: ["نكرة مقصودة", "نكرة غير مقصودة", "مضاف", "علم"], a: 0 },
+        { section: "G4", q: "قابلت (أخاك). علامة نصبه:", options: ["الفتحة", "الألف", "الياء", "الكسرة"], a: 1 },
+        { section: "G4", q: "تطورت التكنولوجيا (تطوراً) سريعاً. تطوراً تعرب:", options: ["مفعول مطلق", "نائب عن المفعول المطلق", "حال", "تمييز"], a: 0 },
 
-        // Grammar Unit 6 & 7
-        { section: "Grammar_6", title: "النحو: الأدوات والممنوع من الصرف", icon: "🚫", q: "كم (كتاباً) قرأت؟ نوع كم:", options: ["خبرية", "استفهامية", "تعجبية", "نعت"], a: 1 },
-        { section: "Grammar_6", q: "كفى بالله وكيلاً. الباء في لفظ الجلالة:", options: ["حرف جر أصلي", "حرف جر زائد", "حرف قسم", "ظرف"], a: 1 },
-        { section: "Grammar_6", q: "صليت في مساجدَ واسعة. مساجد مجرورة بـ:", options: ["الكسرة", "الفتحة", "الياء", "الضمة"], a: 1 },
-        { section: "Grammar_6", q: "مررت بـ (أحمد). المانع من الصرف:", options: ["العلمية والعجمة", "العلمية ووزن الفعل", "العلمية والتأنيث", "الوصفية"], a: 1 },
+        // --- G5 (7 Qs) ---
+        { section: "G5", q: "من يجتهدْ (يسمُ) قدره. علامة جزم (يسم):", options: ["السكون", "حذف النون", "حذف حرف العلة", "الضمة"], a: 2 },
+        { section: "G5", q: "لا تهمل فتندم. الفاء هنا:", options: ["فاء السببية", "فاء الجزاء", "فاء العطف", "فاء الاستئناف"], a: 0 },
+        { section: "G5", q: "متى تسع للخير (فالنجاح حليفك). اقترن الجواب بالفاء لأنه:", options: ["جملة فعلية طلبية", "جملة اسمية", "مبدوء بـ قد", "مبدوء بـ سوف"], a: 1 },
+        { section: "G5", q: "والله (لينتصرن) الحق. الفعل المضارع:", options: ["مرفوع", "منصوب", "مبني على الفتح", "مبني على السكون"], a: 2 },
+        { section: "G5", q: "استقم (تسترح). إعراب تسترح:", options: ["مجزوم في جواب الشرط", "مجزوم في جواب الطلب", "منصوب", "مرفوع"], a: 1 },
+        { section: "G5", q: "لم يكذب المؤمن. الفعل مجزوم بـ:", options: ["السكون", "حذف النون", "حذف العلة", "الفتحة"], a: 0 },
+        { section: "G5", q: "ما كان المهملُ (لينجح). اللام هي:", options: ["لام التعليل", "لام الأمر", "لام الجحود", "لام التوكيد"], a: 2 },
 
-        // General Revision
-        { section: "General", title: "مراجعة شاملة", icon: "🧠", q: "نحن - العرب - نكرم الضيف. (العرب) تعرب:", options: ["مبتدأ ثان", "مفعول به (اختصاص)", "خبر", "بدل"], a: 1 },
-        { section: "General", q: "كلا الطالبين مجتهد. إعراب كلا:", options: ["توكيد معنوي", "مبتدأ مرفوع بضمة مقدرة", "مبتدأ مرفوع بالألف", "فاعل"], a: 1 },
-        { section: "General", q: "الطالبان كلاهما مجتهدان. إعراب كلاهما:", options: ["توكيد معنوي", "مبتدأ ثان", "خبر", "نعت"], a: 0 },
-        { section: "General", q: "لا حبذا الكسل. الفاعل هو:", options: ["الكسل", "ذا", "ضمير مستتر", "محذوف"], a: 1 },
-        { section: "General", q: "قرأت (12) كتاباً. تكتب:", options: ["اثنا عشر", "اثني عشر", "اثنتا عشرة", "اثنتي عشرة"], a: 1 },
-        { section: "General", q: "كلمة (ميناء) يكشف عنها في:", options: ["م ي ن", "و ن ي", "م ن و", "و ن ي"], a: 3 },
-        { section: "General", q: "لعل ذا الخلق محبوب. عند وضع (بدا) مكان لعل:", options: ["بدا ذا الخلق أن يحب", "بدا ذو الخلق أن يحب", "بدا ذو الخلق يحب", "بدا ذا الخلق يحب"], a: 2 },
-        { section: "General", q: "ليس كمثله شيء. خبر ليس نوعه:", options: ["مفرد", "جملة", "شبه جملة", "مصدر مؤول"], a: 0 }
+        // --- G6 (7 Qs) ---
+        { section: "G6", q: "كم (كتاباً) قرأت؟ نوع كم:", options: ["خبرية", "استفهامية", "تعجبية", "نعت"], a: 1 },
+        { section: "G6", q: "كفى بالله وكيلاً. الباء في لفظ الجلالة:", options: ["حرف جر أصلي", "حرف جر زائد", "حرف قسم", "ظرف"], a: 1 },
+        { section: "G6", q: "صليت في مساجدَ واسعة. مساجد مجرورة بـ:", options: ["الكسرة", "الفتحة", "الياء", "الضمة"], a: 1 },
+        { section: "G6", q: "مررت بـ (أحمد). المانع من الصرف:", options: ["العلمية والعجمة", "العلمية ووزن الفعل", "العلمية والتأنيث", "الوصفية"], a: 1 },
+        { section: "G6", q: "نوع (ما) في: ما أجمل السماء!", options: ["نافية", "موصولة", "شرطية", "تعجبية"], a: 3 },
+        { section: "G6", q: "حضر الطلاب (خلا) طالباً. إعراب طالباً:", options: ["اسم مجرور", "مفعول به", "فاعل", "يجوز الجر والنصب"], a: 3 },
+        { section: "G6", q: "أي الكلمات التالية ممنوعة من الصرف لعلة واحدة؟", options: ["عمر", "إبراهيم", "صحراء", "أفضل"], a: 2 },
+
+        // --- Gen (23 Qs) ---
+        { section: "Gen", q: "نحن - العرب - نكرم الضيف. (العرب) تعرب:", options: ["مبتدأ ثان", "مفعول به (اختصاص)", "خبر", "بدل"], a: 1 },
+        { section: "Gen", q: "كلا الطالبين مجتهد. إعراب كلا:", options: ["توكيد معنوي", "مبتدأ مرفوع بضمة مقدرة", "مبتدأ مرفوع بالألف", "فاعل"], a: 1 },
+        { section: "Gen", q: "الطالبان كلاهما مجتهدان. إعراب كلاهما:", options: ["توكيد معنوي", "مبتدأ ثان", "خبر", "نعت"], a: 0 },
+        { section: "Gen", q: "لا حبذا الكسل. الفاعل هو:", options: ["الكسل", "ذا", "ضمير مستتر", "محذوف"], a: 1 },
+        { section: "Gen", q: "قرأت (12) كتاباً. تكتب:", options: ["اثنا عشر", "اثني عشر", "اثنتا عشرة", "اثنتي عشرة"], a: 1 },
+        { section: "Gen", q: "كلمة (ميناء) يكشف عنها في:", options: ["م ي ن", "و ن ي", "م ن و", "و ن ي"], a: 3 },
+        { section: "Gen", q: "لعل ذا الخلق محبوب. عند وضع (بدا) مكان لعل:", options: ["بدا ذا الخلق أن يحب", "بدا ذو الخلق أن يحب", "بدا ذو الخلق يحب", "بدا ذا الخلق يحب"], a: 2 },
+        { section: "Gen", q: "ليس كمثله شيء. خبر ليس نوعه:", options: ["مفرد", "جملة", "شبه جملة", "مصدر مؤول"], a: 0 },
+        { section: "Gen", q: "رب ضارة نافعة. رب حرف جر:", options: ["أصلي", "زائد", "شبيه بالزائد", "قسم"], a: 2 },
+        { section: "Gen", q: "كأن الجندي أسد. كأن تفيد:", options: ["التمني", "الترجي", "التشبيه", "التوكيد"], a: 2 },
+        { section: "Gen", q: "الطالبان كلاهما مجتهد. إعراب كلاهما:", options: ["توكيد معنوي", "مبتدأ ثان", "خبر", "نعت"], a: 1 },
+        { section: "Gen", q: "نعم صفةً الصدق. الفاعل:", options: ["صفة", "الصدق", "ضمير مستتر", "محذوف"], a: 2 },
+        { section: "Gen", q: "إياك والكذب. الكذب تعرب:", options: ["معطوف", "مفعول به لفعل محذوف", "مبتدأ مؤخر", "خبر"], a: 1 },
+        { section: "Gen", q: "أعظم بـ (العمل). العمل تعرب:", options: ["فاعل مرفوع محلاً مجرور لفظاً", "مفعول به", "مبتدأ", "خبر"], a: 0 },
+        { section: "Gen", q: "حضر القاضي. عند جمعها جمع مذكر سالماً:", options: ["القاضيون", "القاضين", "القاضون", "القضاة"], a: 2 },
+        { section: "Gen", q: "كلمة (سمات) يكشف عنها في:", options: ["س م و", "و س م", "س م ت", "س م ي"], a: 1 },
+        { section: "Gen", q: "الوزن الصحيح لـ (يستقم):", options: ["يفتعل", "يستفل", "يستعل", "يستفعل"], a: 1 },
+        { section: "Gen", q: "الطلاب يرجون النجاح. الطالبات يرجون النجاح. وزن الفعلين:", options: ["يفعون - يفعون", "يفعون - يفعلن", "يفعلن - يفعون", "يفعلون - يفعلن"], a: 1 },
+        { section: "Gen", q: "إن في مصر (رجالاً). إعراب رجالاً:", options: ["اسم إن مؤخر", "خبر إن", "مضاف إليه", "فاعل"], a: 0 },
+        { section: "Gen", q: "لا سلام مع النفس إلا بـ (الإيمان). الإيمان:", options: ["مستثنى منصوب", "بدل", "اسم مجرور", "مفعول به"], a: 2 },
+        { section: "Gen", q: "أيها الطلاب اجتهدوا. المنادى:", options: ["الطلاب", "أي", "الهاء", "محذوف"], a: 1 },
+        { section: "Gen", q: "أحب اللغة العربية ولا سيما (النحوُ). النحوُ تعرب:", options: ["خبر لمبتدأ محذوف", "مبتدأ", "فاعل", "مضاف إليه"], a: 0 },
+        { section: "Gen", q: "لعل النصر قريب. لعل تفيد:", options: ["التمني", "الرجاء", "الاستدراك", "التشبيه"], a: 1 }
     ];
 
-    // --- 2. إدارة الحالة (State Management) ---
-    let state = {
-        answers: {},
-        isSubmitted: false
-    };
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 
-    // --- 3. التهيئة والتشغيل ---
-    document.addEventListener('DOMContentLoaded', () => {
-        initNavigation();
-        loadSavedProgress();
-        startTimer();
-    });
-
-    // تنظيم الأقسام
-    const sectionsOrder = [
-        { id: 'Reading', name: 'القراءة', icon: '📖' },
-        { id: 'Literature_Texts', name: 'النصوص والأدب', icon: '📜' },
-        { id: 'Grammar_1', name: 'الوحدة الأولى', icon: '✍️' },
-        { id: 'Grammar_2', name: 'المشتقات', icon: '⚙️' },
-        { id: 'Grammar_3', name: 'النواسخ', icon: '🔄' },
-        { id: 'Grammar_4', name: 'المنصوبات', icon: '🚩' },
-        { id: 'Grammar_5', name: 'الأفعال', icon: '🏃' },
-        { id: 'Grammar_6', name: 'الأدوات والصرف', icon: '🚫' },
-        { id: 'General', name: 'مراجعة شاملة', icon: '🧠' }
-    ];
-
-    function initNavigation() {
-        const navContainer = document.getElementById('navContainer');
-        const mainContent = document.getElementById('mainContent');
-
-        sectionsOrder.forEach((sec, index) => {
-            // 1. Create Nav Button
-            const btn = document.createElement('button');
-            btn.className = 'nav-btn';
-            btn.innerHTML = `<span>${sec.icon}</span> ${sec.name}`;
-            btn.onclick = () => switchSection(sec.id);
-            if (index === 0) btn.classList.add('active');
-            btn.id = `btn-${sec.id}`;
-            navContainer.appendChild(btn);
-
-            // 2. Create Section Container
-            const sectionDiv = document.createElement('div');
-            sectionDiv.className = 'section-container';
-            sectionDiv.id = `sec-${sec.id}`;
-            if (index === 0) sectionDiv.classList.add('active-section');
-
-            // 3. Add Header
-            const header = document.createElement('div');
-            header.className = 'section-header';
-            header.innerHTML = `
-                <h2 class="section-title">${sec.icon} ${sec.name}</h2>
-                <div class="section-subtitle">أجب عن جميع الأسئلة بدقة</div>
-            `;
-            sectionDiv.appendChild(header);
-
-            // 4. Filter & Render Questions for this section
-            const questions = examData.filter(item => item.section === sec.id);
-            questions.forEach((item, qIdx) => {
-                // Find global index in original array
-                const globalIndex = examData.indexOf(item);
-                
-                if (item.type === 'passage') {
-                    const div = document.createElement('div');
-                    div.innerHTML = item.content;
-                    sectionDiv.appendChild(div);
-                } else {
-                    const card = document.createElement('div');
-                    card.className = 'q-card';
-                    card.innerHTML = `
-                        <div class="q-text">${item.q}</div>
-                        <div class="options-grid">
-                            ${item.options.map((opt, i) => `
-                                <label class="option-label" data-idx="${globalIndex}" data-val="${i}" onclick="handleAnswer(${globalIndex}, ${i}, this)">
-                                    <div class="circle-check"></div>
-                                    <span>${opt}</span>
-                                </label>
-                            `).join('')}
-                        </div>
-                        <div class="feedback" id="feedback-${globalIndex}"></div>
-                    `;
-                    sectionDiv.appendChild(card);
-                }
-            });
-
-            // 5. Add "Next" Button (or Submit if last)
-            const actionDiv = document.createElement('div');
-            actionDiv.className = 'action-bar';
-            
-            if (index < sectionsOrder.length - 1) {
-                actionDiv.innerHTML = `<button class="btn btn-next" onclick="switchSection('${sectionsOrder[index+1].id}')">القسم التالي ⬅</button>`;
-            } else {
-                actionDiv.innerHTML = `<button class="btn btn-submit" onclick="submitExam()">تسليم الامتحان ✅</button>`;
-            }
-            sectionDiv.appendChild(actionDiv);
-
-            mainContent.appendChild(sectionDiv);
+    let processedData = [];
+    function initData() {
+        processedData = rawData.map((item, index) => {
+            if(item.type === 'passage') return { ...item, originalIndex: index };
+            let optsObj = item.options.map((txt, idx) => ({ text: txt, isCorrect: idx === item.a }));
+            optsObj = shuffleArray(optsObj);
+            const newOptions = optsObj.map(o => o.text);
+            const newAnswerIndex = optsObj.findIndex(o => o.isCorrect);
+            return { ...item, options: newOptions, a: newAnswerIndex, originalIndex: index };
         });
     }
 
-    function switchSection(id) {
-        // Update Sidebar
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(`btn-${id}`).classList.add('active');
-
-        // Update Content
-        document.querySelectorAll('.section-container').forEach(d => {
-            d.style.display = 'none';
-            d.classList.remove('active-section');
-        });
-        const activeDiv = document.getElementById(`sec-${id}`);
-        activeDiv.style.display = 'block';
-        setTimeout(() => activeDiv.classList.add('active-section'), 10);
-        
-        // Scroll to top
-        document.getElementById('mainContent').scrollTop = 0;
-    }
-
-    function handleAnswer(qIndex, val, labelElement) {
-        if (state.isSubmitted) return;
-
-        // UI Update
-        const parent = labelElement.closest('.options-grid');
-        parent.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
-        labelElement.classList.add('selected');
-
-        // Save State
-        state.answers[qIndex] = val;
-        localStorage.setItem('arabic_exam_v2', JSON.stringify(state));
-    }
-
-    function loadSavedProgress() {
-        const saved = localStorage.getItem('arabic_exam_v2');
-        if (saved) {
-            state = JSON.parse(saved);
-            if (!state.isSubmitted) {
-                Object.keys(state.answers).forEach(key => {
-                    const val = state.answers[key];
-                    // Find the label with this data attribute
-                    const label = document.querySelector(`.option-label[data-idx="${key}"][data-val="${val}"]`);
-                    if (label) label.classList.add('selected');
-                });
-            }
+    let state = { answers: {}, isSubmitted: false };
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playSound(type) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        if (type === 'correct') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+        } else {
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
         }
     }
 
-    // --- Timer ---
+    document.addEventListener('DOMContentLoaded', () => {
+        initData(); renderNav(); renderContent(); startTimer();
+    });
+
+    function renderNav() {
+        const container = document.getElementById('navContainer');
+        sections.forEach((sec, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'nav-btn';
+            if(idx === 0) btn.classList.add('active');
+            btn.innerHTML = `<span>${sec.icon}</span> ${sec.name}`;
+            btn.onclick = () => switchTab(sec.id, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    function renderContent() {
+        const main = document.getElementById('mainContent');
+        sections.forEach((sec, idx) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = `section-container ${idx===0 ? 'active' : ''}`;
+            wrapper.id = `sec-${sec.id}`;
+            wrapper.innerHTML = `<div class="section-header"><h2 class="section-title">${sec.icon} ${sec.name}</h2></div>`;
+            const qs = processedData.filter(d => d.section === sec.id);
+            qs.forEach((item) => {
+                const gIdx = processedData.indexOf(item);
+                if(item.type === 'passage') {
+                    const div = document.createElement('div'); div.innerHTML = item.content; wrapper.appendChild(div);
+                } else {
+                    const card = document.createElement('div'); card.className = 'q-card';
+                    card.innerHTML = `<span class="q-num">سؤال</span><div class="q-text">${item.q}</div>
+                        <div class="options-grid">${item.options.map((opt, i) => `
+                            <label class="option-label" onclick="handleAnswer(${gIdx}, ${i}, this)">
+                            <div class="check-circle"></div><span>${opt}</span></label>`).join('')}</div>
+                        <div class="feedback" id="feed-${gIdx}"></div>`;
+                    wrapper.appendChild(card);
+                }
+            });
+            const btnDiv = document.createElement('div'); btnDiv.className = 'action-bar';
+            if(idx < sections.length - 1) btnDiv.innerHTML = `<button class="btn btn-next" onclick="nextSection(${idx})">القسم التالي ⬅</button>`;
+            else btnDiv.innerHTML = `<button class="btn btn-submit" onclick="submitExam()">✅ إنهاء وتسليم</button>`;
+            wrapper.appendChild(btnDiv);
+            main.appendChild(wrapper);
+        });
+    }
+
+    function switchTab(secId, btnElement) {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        if(btnElement) btnElement.classList.add('active');
+        document.querySelectorAll('.section-container').forEach(d => d.classList.remove('active'));
+        document.getElementById(`sec-${secId}`).classList.add('active');
+        document.getElementById('mainContent').scrollTop = 0;
+    }
+
+    function nextSection(currentIdx) {
+        const nextSec = sections[currentIdx + 1];
+        const navBtns = document.querySelectorAll('.nav-btn');
+        switchTab(nextSec.id, navBtns[currentIdx + 1]);
+    }
+
+    function handleAnswer(qIdx, optIdx, label) {
+        if(state.isSubmitted) return;
+        const parent = label.closest('.options-grid');
+        parent.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+        label.classList.add('selected');
+        state.answers[qIdx] = optIdx;
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        document.getElementById('themeIcon').innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    }
+
     function startTimer() {
-        let duration = 3 * 60 * 60; // 3 Hours
+        let duration = 3 * 60 * 60; 
         const el = document.getElementById('timer');
         setInterval(() => {
-            if (state.isSubmitted) return;
+            if(state.isSubmitted) return;
             duration--;
             const h = Math.floor(duration / 3600);
             const m = Math.floor((duration % 3600) / 60);
             const s = duration % 60;
             el.innerText = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-            if (duration <= 0) submitExam();
+            if(duration <= 0) submitExam();
         }, 1000);
     }
 
-    // --- Submission ---
     function submitExam() {
-        if (state.isSubmitted) return;
+        if(state.isSubmitted) return;
+        const totalQs = processedData.filter(x => !x.type).length;
+        const answered = Object.keys(state.answers).length;
+        if(answered < totalQs) if(!confirm(`يوجد ${totalQs - answered} سؤال غير مجاب. هل أنت متأكد؟`)) return;
         
-        const totalQs = examData.filter(x => !x.type).length;
-        const answeredCount = Object.keys(state.answers).length;
-        
-        if (answeredCount < totalQs) {
-            if(!confirm(`تبقّى ${totalQs - answeredCount} سؤال. هل أنت متأكد من التسليم؟`)) return;
-        }
-
         state.isSubmitted = true;
-        localStorage.removeItem('arabic_exam_v2'); // Clear save
+        let totalScore = 0;
+        let sectionScores = {};
+        sections.forEach(s => sectionScores[s.id] = {total: 0, score: 0, name: s.name});
 
-        // Calculate Score & Show Feedback
-        let score = 0;
-        examData.forEach((item, idx) => {
-            if (item.type === 'passage') return;
-            
+        processedData.forEach((item, idx) => {
+            if(item.type === 'passage') return;
+            sectionScores[item.section].total++;
             const userAns = state.answers[idx];
-            const feedbackEl = document.getElementById(`feedback-${idx}`);
-            const options = document.querySelectorAll(`.option-label[data-idx="${idx}"]`);
-            
-            // Disable interactions
-            options.forEach(o => o.style.pointerEvents = 'none');
+            const feedbackEl = document.getElementById(`feed-${idx}`);
+            const card = feedbackEl.parentElement;
+            const optionLabels = card.querySelectorAll('.option-label');
+            optionLabels.forEach(l => l.style.pointerEvents = 'none');
             feedbackEl.style.display = 'block';
 
-            if (userAns === item.a) {
-                score++;
-                feedbackEl.innerHTML = "إجابة صحيحة ✅";
-                feedbackEl.className = "feedback correct-ans";
+            if(userAns === item.a) {
+                totalScore++; sectionScores[item.section].score++;
+                feedbackEl.innerText = "إجابة صحيحة! أحسنت 🌟"; feedbackEl.classList.add('correct');
+                playSound('correct');
             } else {
-                feedbackEl.innerHTML = `خطأ ❌ الإجابة الصحيحة: ${item.options[item.a]}`;
-                feedbackEl.className = "feedback wrong-ans";
-                // Highlight correct
-                const correctLabel = document.querySelector(`.option-label[data-idx="${idx}"][data-val="${item.a}"]`);
-                if(correctLabel) correctLabel.style.border = "2px solid #10b981";
+                feedbackEl.innerText = `خطأ! الإجابة الصحيحة: ${item.options[item.a]}`;
+                feedbackEl.classList.add('wrong');
+                if(optionLabels[item.a]) {
+                    optionLabels[item.a].style.border = "2px solid #10b981";
+                    optionLabels[item.a].style.backgroundColor = "rgba(16, 185, 129, 0.1)";
+                }
+                playSound('wrong');
             }
         });
 
-        // Show Modal
-        document.getElementById('finalScore').innerText = `${score} / ${totalQs}`;
-        const pct = Math.round((score/totalQs)*100);
-        let msg = pct > 85 ? "مستوى رائع! استمر في التألق 🌟" : (pct > 50 ? "مجهود جيد، تحتاج لبعض المراجعة 👍" : "لا تيأس، حاول مرة أخرى 💪");
-        document.getElementById('scoreMsg').innerText = msg;
+        document.getElementById('finalScore').innerText = `${totalScore} / ${totalQs}`;
+        document.getElementById('scoreMsg').innerText = `نسبة النجاح: ${Math.round((totalScore/totalQs)*100)}%`;
+        renderChart(sectionScores);
         document.getElementById('resultModal').style.display = 'flex';
     }
-</script>
 
+    function renderChart(scores) {
+        const container = document.getElementById('analyticsChart');
+        container.innerHTML = '';
+        Object.values(scores).forEach(obj => {
+            if(obj.total === 0) return;
+            const pct = Math.round((obj.score / obj.total) * 100);
+            const row = document.createElement('div');
+            row.className = 'chart-row';
+            row.innerHTML = `<div style="width:100px">${obj.name.split(':')[0]}</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width: ${pct}%; background-color: ${pct > 50 ? '#10b981' : '#ef4444'}"></div></div>
+                <div style="width:40px; font-weight:bold">${pct}%</div>`;
+            container.appendChild(row);
+        });
+    }
+</script>
 </body>
 </html>
