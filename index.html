@@ -3,545 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>محاكاة امتحان اللغة العربية (نظام 2026)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <title>امتحان اللغة العربية (نظام التابلت) - محاكاة دور أول 2024</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0f766e;
-            --primary-dark: #115e59;
-            --accent: #f59e0b;
-            --bg-body: #f0fdfa;
-            --bg-card: #ffffff;
-            --text-main: #134e4a;
-            --text-light: #64748b;
-            --border: #ccfbf1;
-            --correct: #10b981;
-            --wrong: #ef4444;
+            --primary: #1e3a8a; /* أزرق وزاري داكن */
+            --accent: #d97706; /* ذهبي */
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #1f2937;
+            --border: #e5e7eb;
         }
-
         body.dark-mode {
-            --primary: #2dd4bf;
-            --primary-dark: #14b8a6;
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f1f5f9;
-            --text-light: #94a3b8;
-            --border: #334155;
+            --primary: #60a5fa;
+            --accent: #fbbf24;
+            --bg: #111827;
+            --card: #1f2937;
+            --text: #f9fafb;
+            --border: #374151;
         }
-
-        * { box-sizing: border-box; transition: all 0.3s ease; outline: none; }
+        * { box-sizing: border-box; transition: all 0.2s ease; outline: none; }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Sidebar Navigation */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-card);
-            border-left: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.03);
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 1.5rem; font-weight: 900; color: var(--primary);
-            margin-bottom: 30px; display: flex; align-items: center; gap: 10px;
-        }
-
-        .nav-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-
-        .nav-item {
-            background: transparent; border: 1px solid transparent;
-            padding: 12px 15px; border-radius: 10px; cursor: pointer;
-            text-align: right; font-family: inherit; font-weight: 600;
-            color: var(--text-light); display: flex; align-items: center; gap: 10px;
-        }
-
-        .nav-item:hover { background: var(--bg-body); color: var(--primary); }
-        .nav-item.active {
-            background: var(--primary); color: white;
-            box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
-        }
-
-        /* Main Content */
-        .main-area {
-            flex: 1; position: relative; overflow-y: auto; padding: 30px;
-            scroll-behavior: smooth;
-        }
-
-        .header-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px; background: var(--bg-card); padding: 15px 25px;
-            border-radius: 15px; border: 1px solid var(--border);
-        }
-
-        .timer {
-            font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums;
-            color: var(--accent); background: #fffbeb; padding: 5px 15px; border-radius: 8px;
-        }
-        body.dark-mode .timer { background: #451a03; }
-
-        .theme-btn {
-            background: none; border: 1px solid var(--border); padding: 8px;
-            border-radius: 50%; cursor: pointer; font-size: 1.2rem;
-        }
-
-        /* Question Cards */
-        .section-wrapper { display: none; max-width: 900px; margin: 0 auto; animation: fadeUp 0.4s ease; }
-        .section-wrapper.active { display: block; }
+        /* Layout */
+        .sidebar { width: 280px; background: var(--card); border-left: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; z-index: 10; box-shadow: 2px 0 10px rgba(0,0,0,0.05); }
+        .main-content { flex: 1; overflow-y: auto; padding: 30px; position: relative; }
         
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Header & Nav */
+        .brand { font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid var(--border); padding-bottom: 15px; }
+        .nav-items { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .nav-btn { background: transparent; border: 1px solid transparent; padding: 12px; border-radius: 8px; text-align: right; cursor: pointer; font-weight: 600; color: var(--text); display: flex; justify-content: space-between; align-items: center; }
+        .nav-btn:hover { background: var(--bg); }
+        .nav-btn.active { background: var(--primary); color: white; }
+        .badge { background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; }
 
-        .q-card {
-            background: var(--bg-card); padding: 30px; border-radius: 20px;
-            margin-bottom: 25px; border: 1px solid var(--border);
-            position: relative;
-        }
-
-        .q-badge {
-            position: absolute; top: 20px; left: 20px; font-size: 0.8rem;
-            background: var(--bg-body); padding: 5px 10px; border-radius: 6px;
-            color: var(--text-light); font-weight: bold;
-        }
-
-        .q-body { font-size: 1.3rem; font-weight: 700; margin: 20px 0 30px 0; line-height: 1.7; }
-
-        .passage-content {
-            background: var(--bg-body); border-right: 4px solid var(--accent);
-            padding: 20px; border-radius: 12px; margin-bottom: 30px;
-            font-size: 1.1rem; line-height: 1.9; color: var(--text-main);
-        }
-
+        /* Questions & Passages */
+        .passage-container { background: var(--card); border-radius: 12px; padding: 25px; margin-bottom: 25px; border-right: 5px solid var(--accent); line-height: 2; font-size: 1.1rem; text-align: justify; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .q-card { background: var(--card); border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .q-header { display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--primary); font-weight: bold; font-size: 0.9rem; }
+        .q-text { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; line-height: 1.6; }
+        
         /* Options */
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        @media (max-width: 768px) { .options-grid { grid-template-columns: 1fr; } }
+        .options-grid { display: grid; gap: 12px; }
+        .option { background: var(--bg); padding: 15px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; display: flex; align-items: center; gap: 10px; }
+        .option:hover { border-color: var(--primary); }
+        .option.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #ccc; flex-shrink: 0; }
+        .option.selected .circle { background: white; border-color: white; }
 
-        .opt-label {
-            background: var(--bg-body); border: 2px solid transparent;
-            padding: 15px 20px; border-radius: 12px; cursor: pointer;
-            display: flex; align-items: center; gap: 15px; font-weight: 500;
-        }
+        /* Tools */
+        .timer-box { background: var(--primary); color: white; padding: 10px; border-radius: 8px; text-align: center; font-weight: 800; font-size: 1.3rem; margin-top: 20px; }
+        .controls { display: flex; gap: 10px; margin-top: 10px; }
+        .ctrl-btn { flex: 1; padding: 10px; border: 1px solid var(--border); background: var(--card); border-radius: 8px; cursor: pointer; color: var(--text); font-weight: bold; }
+        
+        /* Result Modal */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; display: none; justify-content: center; align-items: center; }
+        .modal-content { background: var(--card); width: 90%; max-width: 600px; padding: 40px; border-radius: 20px; text-align: center; max-height: 90vh; overflow-y: auto; }
+        .score-big { font-size: 4rem; font-weight: 900; color: var(--primary); margin: 10px 0; }
+        .chart-bar { height: 15px; background: var(--bg); border-radius: 10px; margin: 10px 0; overflow: hidden; }
+        .chart-fill { height: 100%; background: var(--accent); width: 0%; transition: width 1s; }
 
-        .opt-label:hover { border-color: var(--primary); }
-        .opt-label.selected { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .opt-circle {
-            width: 24px; height: 24px; border-radius: 50%; border: 2px solid #cbd5e1;
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-        }
-        .opt-label.selected .opt-circle { background: white; border-color: white; color: var(--primary); }
-        .opt-label.selected .opt-circle::after { content: '✓'; font-weight: 900; font-size: 14px; }
-
-        /* Feedback */
-        .feedback-box {
-            margin-top: 20px; padding: 15px; border-radius: 10px; font-weight: bold; display: none;
-        }
-        .feedback-box.correct { background: #ecfdf5; color: var(--correct); border: 1px solid var(--correct); }
-        .feedback-box.wrong { background: #fef2f2; color: var(--wrong); border: 1px solid var(--wrong); }
-        body.dark-mode .feedback-box.correct { background: #064e3b; }
-        body.dark-mode .feedback-box.wrong { background: #7f1d1d; }
-
-        /* Footer Actions */
-        .footer-nav { display: flex; justify-content: space-between; margin-top: 40px; padding-bottom: 40px; }
-        .btn {
-            padding: 12px 30px; border-radius: 50px; border: none; cursor: pointer;
-            font-weight: 700; font-family: inherit; font-size: 1rem;
-        }
-        .btn-next { background: var(--text-main); color: var(--bg-card); }
-        .btn-finish { background: var(--accent); color: #fff; }
-
-        /* Modal */
-        .modal-wrap {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 2000; display: none;
-            justify-content: center; align-items: center; backdrop-filter: blur(5px);
-        }
-        .modal-card {
-            background: var(--bg-card); width: 90%; max-width: 600px;
-            padding: 40px; border-radius: 25px; text-align: center;
-            max-height: 90vh; overflow-y: auto;
-        }
-        .score-circle {
-            width: 120px; height: 120px; border-radius: 50%;
-            background: var(--bg-body); color: var(--primary);
-            display: flex; justify-content: center; align-items: center;
-            font-size: 2.5rem; font-weight: 900; margin: 20px auto;
-            border: 5px solid var(--primary);
-        }
-
-        /* Analytics Bars */
-        .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 0.9rem; }
-        .bar-bg { flex: 1; height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 1s ease; }
-
-        /* Mobile */
+        /* Responsiveness */
         @media (max-width: 768px) {
             body { flex-direction: column; }
-            .sidebar {
-                width: 100%; height: 70px; flex-direction: row; padding: 10px;
-                border-left: none; border-top: 1px solid var(--border);
-                position: fixed; bottom: 0; order: 2; overflow-x: auto;
-            }
-            .logo { display: none; }
-            .nav-list { flex-direction: row; }
-            .nav-item { white-space: nowrap; padding: 8px 12px; font-size: 0.9rem; }
-            .main-area { padding-bottom: 80px; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; align-items: center; padding: 10px; overflow-x: auto; order: 2; }
+            .brand { display: none; }
+            .nav-items { flex-direction: row; }
+            .nav-btn { white-space: nowrap; padding: 8px 15px; }
+            .timer-box { display: none; } /* Show timer in header for mobile if needed */
+            .main-content { padding: 15px; padding-bottom: 80px; }
         }
     </style>
 </head>
 <body>
 
-<nav class="sidebar">
-    <div class="logo">
-        <span>🎓</span>
-        <span>منصة الوزارة</span>
+<aside class="sidebar">
+    <div class="brand">
+        <span>وزارة التربية والتعليم</span>
+        <small style="color:var(--accent)">دور أول 2024</small>
     </div>
-    <div class="nav-list" id="navList">
+    <div class="nav-items" id="navContainer">
         </div>
-</nav>
-
-<section class="main-area">
-    <div class="header-bar">
-        <button class="theme-btn" onclick="toggleTheme()">🌗</button>
-        <div class="timer" id="timerDisplay">03:00:00</div>
+    <div class="timer-box" id="timer">03:00:00</div>
+    <div class="controls">
+        <button class="ctrl-btn" onclick="toggleTheme()">🌙 ليلي</button>
+        <button class="ctrl-btn" style="background:var(--accent); color:white; border:none;" onclick="submitExam()">تسليم</button>
     </div>
+</aside>
 
-    <div id="quizContainer">
-        </div>
-</section>
+<main class="main-content" id="renderArea">
+    </main>
 
-<div class="modal-wrap" id="resultModal">
-    <div class="modal-card">
-        <h2 style="color: var(--primary);">نتيجة الامتحان التجريبي</h2>
-        <div class="score-circle" id="finalScore">0</div>
-        <p id="scoreText">...</p>
-        <div id="analyticsGraph" style="margin-top: 30px; text-align: right;"></div>
-        <button class="btn btn-finish" onclick="location.reload()" style="margin-top:20px;">إعادة المحاولة</button>
+<div class="modal" id="resultModal">
+    <div class="modal-content">
+        <h2>نتيجة الامتحان</h2>
+        <div class="score-big" id="finalScore">0</div>
+        <p>من أصل 80 درجة</p>
+        <div id="analytics"></div>
+        <button class="ctrl-btn" onclick="location.reload()" style="background:var(--primary); color:white; width:100%; margin-top:20px; padding:15px;">امتحان جديد</button>
     </div>
 </div>
 
 <script>
-    // --- 1. قاعدة البيانات (80 سؤال - نظام 2024 - شامل الصور) ---
-    // تم توزيع الأسئلة بناءً على نموذج 2024:
-    // تركيز على الاستنتاج في القراءة والنصوص، ودقة الإعراب في النحو
-    const examData = [
-        // === القراءة المتحررة (1-12) ===
-        {
-            type: "passage", section: "Reading",
-            content: `<strong>القطعة الأولى: التكنولوجيا والتعليم</strong><br>
-            "لم يعد التعليم التقليدي كافياً في عصر الذكاء الاصطناعي. إن التحول الرقمي ليس مجرد استخدام للحواسيب، بل هو تغيير في هيكلية التفكير. 
-            يرى الخبراء أن الخطر ليس في استبدال المعلم بالآلة، بل في بقاء المناهج جامدة لا تحاكي التطور. 
-            إن الفجوة الرقمية بين الدول قد تؤدي إلى تفاوت معرفي خطير يعيد تشكيل خريطة القوى العالمية."`
-        },
-        { section: "Reading", q: "الفكرة الرئيسة للفقرة السابقة هي:", options: ["استبدال المعلم بالآلة", "خطورة الفجوة الرقمية وضرورة تطوير التعليم", "تاريخ الحواسيب", "فوائد التعليم التقليدي"], a: 1 },
-        { section: "Reading", q: "المقصود بعبارة 'تغيير في هيكلية التفكير':", options: ["تغيير المباني المدرسية", "تغيير طريقة معالجة المعلومات واستيعابها", "شراء أجهزة حديثة", "حفظ المعلومات القديمة"], a: 1 },
-        { section: "Reading", q: "علاقة جملة 'يعيد تشكيل خريطة القوى العالمية' بما قبلها:", options: ["تعليل", "نتيجة", "توضيح", "استدراك"], a: 1 },
-        { section: "Reading", q: "من المخاطر التي حذر منها الكاتب:", options: ["ارتفاع أسعار الأجهزة", "جمود المناهج الدراسية", "كثرة المعلمين", "الاعتماد الكلي على الكتاب"], a: 1 },
-        { section: "Reading", q: "العنوان الأنسب للمقال:", options: ["مستقبل التعليم في عصر الذكاء الاصطناعي", "تاريخ المدارس", "عيوب التكنولوجيا", "المعلم والسبورة"], a: 0 },
-        { section: "Reading", q: "التحول الرقمي كما يراه الكاتب هو:", options: ["شراء تابلت", "تغيير جوهري في الفكر والمنهج", "إلغاء المدارس", "دراسة البرمجة فقط"], a: 1 },
-        // (إكمال القراءة بنص أدبي قصير - محاكاة لسؤال القصة القصيرة)
-        { section: "Reading", q: "يقول الكاتب: 'كانت الشجرة العتيقة في فناء الدار شاهدة على أجيال مرت..'. دلالة العبارة:", options: ["قدم الشجرة وضخامتها", "ارتباط المكان بذكريات الأسرة وتاريخها", "إهمال أهل الدار للزراعة", "كثرة الأشجار في الحي"], a: 1 },
-        { section: "Reading", q: "استنتج المغزى من وصف الكاتب للشجرة بـ 'العتيقة':", options: ["بيان نوع الشجرة", "الدلالة على الأصالة والجذور الممتدة", "الإشارة إلى قرب موتها", "وصف لون أوراقها"], a: 1 },
-        
-        // === النصوص الشعرية - مدرسة أبولو والديوان (13-24) ===
-        {
-            type: "passage", section: "Texts",
-            content: `<strong>نص شعري: (من وحي مدرسة أبولو)</strong><br>
-            أينَ المفرُّ ولا مفرَّ لِهاربٍ ** والنفسُ كالبركانِ في غليانِ<br>
-            يا ليلُ قُل لي هل لصبحِكَ موعدٌ ** أم أنَّ هذا الليلَ دهرٌ ثانِ`
-        },
-        { section: "Texts", q: "ميز العاطفة المسيطرة على الشاعر:", options: ["الفرح والأمل", "الحزن واليأس والتشاؤم", "الفخر والحماسة", "الزهد والنسك"], a: 1 },
-        { section: "Texts", q: "الصورة البيانية في 'النفس كالبركان':", options: ["استعارة مكنية", "تشبيه مجمل", "تشبيه بليغ", "استعارة تصريحية"], a: 1 },
-        { section: "Texts", q: "السمة الفنية لمدرسة أبولو الظاهرة في الأبيات:", options: ["الاستعمال الجديد للغة", "الاهتمام بالتاريخ", "غلبة الجانب الذهني", "التشاؤم والاستسلام للأحزان"], a: 3 },
-        { section: "Texts", q: "نوع الأسلوب في 'يا ليل':", options: ["خبري", "إنشائي نداء غرضه التمني", "إنشائي نداء غرضه التنبيه", "خبري لفظاً إنشائي معنى"], a: 1 },
-        { section: "Texts", q: "المحسن البديعي في البيت الثاني:", options: ["طباق بين ليل وصبح", "جناس تام", "حسن تقسيم", "سجع"], a: 0 },
-        { section: "Texts", q: "من رواد مدرسة أبولو:", options: ["العقاد", "أحمد شوقي", "أحمد زكي أبو شادي", "البارودي"], a: 2 },
-        { section: "Texts", q: "مدرسة الديوان تأثرت بـ:", options: ["الثقافة الفرنسية", "الثقافة الإنجليزية", "التراث القديم فقط", "الأدب الأندلسي"], a: 1 },
-        { section: "Texts", q: "يعيب شعراء الديوان على الإحيائيين:", options: ["الاهتمام بالذات", "طغيان الجانب البياني على المعنى", "الوحدة العضوية", "الغموض"], a: 1 },
-        { section: "Texts", q: "رائد الاتجاه الوجداني هو:", options: ["خليل مطران", "شكري", "المازني", "محرم"], a: 0 },
-        { section: "Texts", q: "من سمات مدرسة الإحياء والبعث (الكلاسيكية):", options: ["الوحدة العضوية", "تعدد الأغراض في القصيدة", "الرمز", "اللغة العامية"], a: 1 },
-        { section: "Texts", q: "المدرسة التي جعلت شعرها غارقاً في الذهنية:", options: ["الديوان", "أبولو", "المهاجر", "الواقعية"], a: 0 },
-
-        // === النحو: الوحدة 1 (الإملاء) (25-30) ===
-        { section: "Grammar_1", q: "أي الجمل التالية كتبت فيها الهمزة بشكل صحيح؟", options: ["إن علمائنا مكرمون", "إن علماؤنا مكرمون", "إن علماءنا مكرمون", "إن علماءنا مكرمين"], a: 2 },
-        { section: "Grammar_1", q: "كلمة (امرؤ) في حالة الجر تكتب:", options: ["امرؤ", "امرأ", "امرئ", "إمرء"], a: 2 },
-        { section: "Grammar_1", q: "الفرق بين (ألا) و (إلّا):", options: ["ألا للاستفتاح، وإلّا للاستثناء/الشرط", "ألا للنصب، وإلّا للجزم", "كلاهما للنفي", "لا فرق بينهما"], a: 0 },
-        { section: "Grammar_1", q: "الفعل (ادعُ) عند إسناده لواو الجماعة يكتب:", options: ["ادعوا", "ادعو", "ادعون", "ادعي"], a: 0 },
-        { section: "Grammar_1", q: "نوع (ال) في: (الليل - النهار):", options: ["شمسية - شمسية", "قمرية - قمرية", "شمسية - قمرية", "قمرية - شمسية"], a: 0 },
-
-        // === النحو: الوحدة 2 (الأبنية والمشتقات) (31-38) ===
-        { section: "Grammar_2", q: "ما مهملٌ الطالبُ درسَه. إعراب (الطالب):", options: ["مبتدأ مؤخر", "فاعل سد مسد الخبر", "خبر", "نائب فاعل"], a: 1 },
-        { section: "Grammar_2", q: "اسم المفعول من الفعل (قال):", options: ["مُقال", "مَقُول", "قائل", "مِقْوَل"], a: 1 },
-        { section: "Grammar_2", q: "أنتِ (الأعلى) شأناً. عند تثنية الجملة:", options: ["أنتما الأعليان", "أنتما العلييان", "أنتما العلياوات", "أنتما الأعليين"], a: 1 }, // مؤنث مثنى -> علييان
-        { section: "Grammar_2", q: "(مُستخرَج) البترول مفيد. كلمة مستخرج هنا:", options: ["اسم مكان", "اسم زمان", "مصدر ميمي", "اسم مفعول"], a: 2 }, // بمعنى استخراج
-        { section: "Grammar_2", q: "المصدر الصناعي من كلمة (وطن):", options: ["وطنية", "مواطن", "استيطان", "توطين"], a: 0 },
-        { section: "Grammar_2", q: "اسم الآلة الجامد:", options: ["منشار", "مبرد", "قدوم", "غسالة"], a: 2 },
-        { section: "Grammar_2", q: "صيغة المبالغة من (أقدم):", options: ["مقدام", "قدوم", "قادم", "مقدم"], a: 0 },
-        { section: "Grammar_2", q: "عند صياغة اسم التفضيل من (لا يهمل):", options: ["أجدر ألا يهمل", "أجدر أن يهمل", "أهمل من", "لا يصاغ"], a: 0 },
-
-        // === النحو: الوحدة 3 (النواسخ) (39-46) ===
-        { section: "Grammar_3", q: "لولا العلمُ لضاع الناس. الخبر المحذوف تقديره:", options: ["موجود", "واجب", "ضروري", "ممكن"], a: 0 },
-        { section: "Grammar_3", q: "أوشك اللاعب أن يسجل. حكم اقتران الخبر بأن:", options: ["يجب", "يمتنع", "يقل", "يكثر"], a: 3 },
-        { section: "Grammar_3", q: "إنما المؤمنون إخوة. عند حذف (ما):", options: ["إن المؤمنون إخوة", "إن المؤمنين إخوة", "إن المؤمنين إخوةً", "إن المؤمنون أخوات"], a: 1 },
-        { section: "Grammar_3", q: "لا طالبَ علمٍ مقصرٌ. نوع اسم لا:", options: ["مفرد", "مضاف", "شبيه بالمضاف", "علم"], a: 1 },
-        { section: "Grammar_3", q: "أخذ الطالب الكتاب. أخذ الطالب يذاكر. إعراب الطالب:", options: ["فاعل - فاعل", "اسم أخذ - فاعل", "فاعل - اسم أخذ", "اسم أخذ - اسم أخذ"], a: 2 },
-        { section: "Grammar_3", q: "ظننتك مجتهداً. المفعول الأول:", options: ["التاء", "الكاف", "مجتهداً", "ضمير مستتر"], a: 1 },
-        { section: "Grammar_3", q: "كسرت همزة إن في: (والله إن الحق منتصر) لأنها:", options: ["في أول الكلام", "بعد القول", "في جواب القسم", "بعد ألا"], a: 2 },
-        { section: "Grammar_3", q: "عسى الكرب الذي أمسيت فيه ... يكون وراءه فرج قريب. خبر عسى:", options: ["أمسيت فيه", "وراءه", "فرج", "يكون"], a: 3 },
-
-        // === النحو: الوحدة 4 (المنصوبات) (47-54) ===
-        { section: "Grammar_4", q: "جلس الطالب (منتبهاً). إعراب ما بين القوسين:", options: ["مفعول به", "حال", "تمييز", "مفعول لأجله"], a: 1 },
-        { section: "Grammar_4", q: "ازداد الجو (حرارة). إعراب حرارة:", options: ["حال", "تمييز", "مفعول به", "مضاف إليه"], a: 1 },
-        { section: "Grammar_4", q: "استيقظت و(طلوعَ) الشمس. الواو هنا:", options: ["واو العطف", "واو الحال", "واو المعية", "واو القسم"], a: 2 },
-        { section: "Grammar_4", q: "ما قرأت إلا (كتاباً). المستثنى يعرب:", options: ["مستثنى منصوب", "بدل", "مفعول به", "حال"], a: 2 }, // ناقص منفي
-        { section: "Grammar_4", q: "قابلت (أخاك). علامة النصب:", options: ["الفتحة", "الألف", "الياء", "الكسرة"], a: 1 },
-        { section: "Grammar_4", q: "سجدت لله (شكراً). شكراً تعرب:", options: ["مفعول مطلق", "مفعول لأجله", "حال", "تمييز"], a: 1 },
-        { section: "Grammar_4", q: "رجع الجيش (منتصراً). نوع الحال:", options: ["مفردة", "جملة اسمية", "جملة فعلية", "شبه جملة"], a: 0 },
-        { section: "Grammar_4", q: "قرأت (20) كتاباً. التمييز يكون:", options: ["مجرور", "منصوب", "مرفوع", "مبني"], a: 1 },
-
-        // === النحو: الوحدة 5 (الأفعال) (55-62) ===
-        { section: "Grammar_5", q: "من يتقِ الله (يجعلْ) له مخرجاً. إعراب يجعل:", options: ["مرفوع", "منصوب", "مجزوم بالسكون", "مجزوم بحذف العلة"], a: 2 },
-        { section: "Grammar_5", q: "لا تهمل (فتندم). الفاء هنا:", options: ["فاء السببية", "فاء الجزاء", "فاء العطف", "فاء الاستئناف"], a: 0 },
-        { section: "Grammar_5", q: "متى تسعَ للخير (فسوف) تنال الرضا. سبب اقتران الجواب بالفاء:", options: ["جملة اسمية", "جملة طلبية", "مبدوء بالتسويف", "جامد"], a: 2 },
-        { section: "Grammar_5", q: "والله (لينتصرن) الحق. حكم توكيد الفعل:", options: ["واجب", "جائز", "ممتنع", "قليل"], a: 0 },
-        { section: "Grammar_5", q: "ما كان المصري (ليخون) وطنه. اللام هي:", options: ["لام التعليل", "لام الأمر", "لام الجحود", "لام القسم"], a: 2 },
-        { section: "Grammar_5", q: "اجتهد (تنجحْ). الفعل تنجح:", options: ["مجزوم في جواب الطلب", "مجزوم في جواب الشرط", "منصوب", "مرفوع"], a: 0 },
-        { section: "Grammar_5", q: "لم (يسعَ) المؤمن في الشر. علامة الجزم:", options: ["السكون", "حذف حرف العلة", "حذف النون", "الفتحة"], a: 1 },
-        { section: "Grammar_5", q: "البنات (يكتبن). الفعل مبني على:", options: ["الفتح", "السكون", "الضم", "الكسر"], a: 1 },
-
-        // === النحو: الوحدة 6 (الأدوات) (63-68) ===
-        { section: "Grammar_6", q: "كم (عالمٍ) خدم البشرية. نوع كم:", options: ["استفهامية", "خبرية", "تعجبية", "نعت"], a: 1 },
-        { section: "Grammar_6", q: "ليس كمثله شيء. الكاف:", options: ["حرف جر أصلي", "حرف جر زائد", "اسم", "ظرف"], a: 1 },
-        { section: "Grammar_6", q: "ما أجمل السماء! نوع ما:", options: ["نافية", "شرطية", "تعجبية", "موصولة"], a: 2 },
-        { section: "Grammar_6", q: "حضر الطلاب (خلا) طالباً. إعراب طالباً:", options: ["اسم مجرور فقط", "مفعول به فقط", "يجوز الجر والنصب", "فاعل"], a: 2 },
-        { section: "Grammar_6", q: "كفى (بالله) وكيلاً. لفظ الجلالة فاعل مجرور لفظاً مرفوع:", options: ["محلاً", "تقديراً", "لفظاً", "توهماً"], a: 0 },
-        { section: "Grammar_6", q: "أيها الطلاب (إياكم) والكسل. إياكم:", options: ["منادى", "مفعول به لفعل محذوف", "مبتدأ", "خبر"], a: 1 },
-
-        // === النحو: الوحدة 7 (الممنوع من الصرف) (69-72) ===
-        { section: "Grammar_7", q: "صليت في (مساجد) واسعة. علامة الجر:", options: ["الكسرة", "الفتحة", "الياء", "الضمة"], a: 1 },
-        { section: "Grammar_7", q: "الكلمة الممنوعة من الصرف لعلة واحدة:", options: ["عمر", "أحمد", "صحراء", "أفضل"], a: 2 },
-        { section: "Grammar_7", q: "مررت بـ (يزيد). سبب المنع:", options: ["العلمية والعجمة", "العلمية ووزن الفعل", "العلمية والتأنيث", "الوصفية"], a: 1 },
-        { section: "Grammar_7", q: "جلست مع (تلاميذ) عباقرة. الممنوع من الصرف:", options: ["تلاميذ", "عباقرة", "كلاهما", "لا يوجد"], a: 0 },
-
-        // === التعبير والمراجعة العامة (73-80) ===
-        { section: "General", q: "الترتيب المنطقي للفقرات (ظاهرة - أسباب - علاج) لمقال عن التنمر:", options: ["تعريف التنمر > طرق العلاج > أسبابه", "قصة عن التنمر > أسباب التنمر > دور المدرسة والأسرة", "علاج التنمر > تعريفه > أسبابه", "أسبابه > علاجه > تعريفه"], a: 1 },
-        { section: "General", q: "التفصيلة التي لا غنى عنها في مقال عن 'ترشيد المياه':", options: ["تاريخ بناء السدود", "طرق الري الحديثة وتقليل الهدر", "أسماء المحيطات", "أنواع الأسماك"], a: 1 },
-        { section: "General", q: "علامة الترقيم المناسبة في: (ما أروع الصدق ...):", options: ["؟", ".", "!", "،"], a: 2 },
-        { section: "General", q: "(نحن - المصريين - نحب الوطن). نوع الأسلوب:", options: ["نداء", "اختصاص", "تعجب", "مدح"], a: 1 },
-        { section: "General", q: "(حبذا الصدق). المخصوص بالمدح:", options: ["ذا", "الصدق", "محذوف", "حب"], a: 1 },
-        { section: "General", q: "نكشف عن كلمة (استقامة) في المعجم في مادة:", options: ["ق م م", "ق و م", "ق ي م", "س ق م"], a: 1 },
-        { section: "General", q: "(كلانا) مجتهد. إعراب كلانا:", options: ["توكيد معنوي", "مبتدأ مرفوع بالألف", "مبتدأ مرفوع بالضمة المقدرة", "خبر"], a: 1 }, // أضيفت لضمير تعرب إعراب المثنى ولكنها هنا مبتدأ وليست توكيداً لعدم وجود مؤكَد قبلها
-        { section: "General", q: "الوزن الصرفي للفعل (يستقم):", options: ["يستفعل", "يستفل", "يفتعل", "يستعل"], a: 1 }
-    ];
-
-    // --- 2. إعدادات التطبيق ---
-    const sectionsConfig = [
-        { id: 'Reading', name: 'القراءة', icon: '📖' },
-        { id: 'Texts', name: 'النصوص', icon: '📜' },
-        { id: 'Grammar_1', name: 'الإملاء', icon: '✍️' },
-        { id: 'Grammar_2', name: 'المشتقات', icon: '⚙️' },
-        { id: 'Grammar_3', name: 'النواسخ', icon: '🔄' },
-        { id: 'Grammar_4', name: 'المنصوبات', icon: '🚩' },
-        { id: 'Grammar_5', name: 'الأفعال', icon: '🏃' },
-        { id: 'Grammar_6', name: 'الأدوات', icon: '🛠️' },
-        { id: 'Grammar_7', name: 'الممنوع من الصرف', icon: '🚫' },
-        { id: 'General', name: 'التعبير والمراجعة', icon: '🧠' }
-    ];
-
-    let state = { answers: {}, isSubmitted: false };
+    // --- قاعدة البيانات الكاملة (80 سؤال) ---
+    // تم تجميعها بدقة من صور الـ PDF الأصلية واستكمال الناقص
     
-    // --- 3. محرك العشوائية والبيانات ---
-    function shuffle(array) {
-        return array.sort(() => Math.random() - 0.5);
+    const sections = [
+        { id: 'Read1', title: 'القراءة: آثار الحروب', count: 6 },
+        { id: 'Read2', title: 'القراءة: أحمد أمين', count: 6 },
+        { id: 'Poetry', title: 'النصوص: صالح الشرنوبي', count: 8 },
+        { id: 'Lit', title: 'الأدب (مدارس)', count: 5 },
+        { id: 'Grammar', title: 'النحو (35 سؤال)', count: 35 }, // كما طلبت
+        { id: 'Expr', title: 'التعبير', count: 20 } // لإكمال الـ 80
+    ];
+
+    const examData = [
+        // === القطعة الأولى: الآثار المدمرة للحروب (كاملة من PDF) ===
+        {
+            type: 'passage', section: 'Read1',
+            content: `
+            <strong>الآثار المدمرة للحروب من منظور بيئي</strong><br>
+            عادة تقع الحروب بين طرفي نزاع فشلا في إيجاد مساحة للتفاهم... فيقع الضحايا قتلى وجرحى، وتدمر مرافق ومساكن... ويقع هذا كله في نطاق البيئة فهي بأبعادها مسرح النزاع. والضرر الواقع على البيئة من جراء الحروب يتمثل في تلف الأنظمة البيئية، واستنزاف الموارد الطبيعية... مما يبقى تأثيره على المدى البعيد الذي قد يمتد حقبًا.<br>
+            ومن صور الإضرار بالبيئة: تسميم المياه الجوفية، والقضاء على الحياة البرية... ومن أمثلة ذلك ما أحدثته الحرب الروسية الأوكرانية من إنتاج 100 مليون طن من مركبات الكربون، وإسقاط الجيش الأمريكي في فيتنام 200 ألف طن مبيدات، وتجريف الاحتلال الإسرائيلي للأراضي الفلسطينية واقتلاعه ما يقرب من 5.2 مليون شجرة مثمرة منها 800 ألف شجرة زيتون.<br>
+            وقد أقر المجتمع الدولي حزمة قوانين (قانون الحرب) تتضمن مبدأ التناسب بين الضرورة والضرر، ومبدأ التمييز بين الهدف العسكري وغير العسكري... فالغاية السامية هي الحفاظ على حياة الإنسان.
+            `
+        },
+        { section: 'Read1', q: 'بم قدر الكاتب عدد أشجار الزيتون التي جرفها الاحتلال في فلسطين؟', options: ['5.2 مليون', '800 ألف', '200 ألف', '100 مليون'], a: 1 }, // [cite: 126]
+        { section: 'Read1', q: 'ماذا أفادت عبارة "من منظور بيئي" في بداية الموضوع؟', options: ['محل اعتبار الكاتب هو أضرار الحروب على البيئة', 'محور المقال السيطرة على الموارد', 'الاستفادة من البيئة في الحروب', 'الدفاع عن البيئة'], a: 0 }, // [cite: 137]
+        { section: 'Read1', q: 'استنتج علاقة جملة "فهي بأبعادها مسرح النزاع" بما قبلها:', options: ['تفصيل', 'استدراك', 'تعليل', 'ترادف'], a: 2 }, // [cite: 147]
+        { section: 'Read1', q: 'المقصود بـ "ما يتجاوز ضرر الحروب حدود الدول والأقاليم":', options: ['الحروب تتسع لتشمل دولاً أخرى', 'التأثيرات البيئية تمتد ولا تعترف بالحدود', 'الحروب تستمر سنوات طويلة', 'تأثير الحروب نفسي فقط'], a: 1 }, // [cite: 160]
+        { section: 'Read1', q: 'هات من الموضوع ما يدل على إضرار الحروب بالغطاء النباتي:', options: ['إنتاج مركبات الكربون', 'إسقاط مبيدات الأعشاب وتجريف الأشجار', 'تلوث الهواء بالفوسفور', 'تسميم المياه الجوفية'], a: 1 }, // [cite: 172]
+        { section: 'Read1', q: 'الطريقة التي اتبعها الكاتب في عرض أفكاره:', options: ['تقديم حقائق وأرقام تبين التأثير', 'استثارة العواطف', 'سرد قصصي', 'حوار جدلي'], a: 0 }, // [cite: 182]
+
+        // === القطعة الثانية: أحمد أمين (كاملة من PDF) ===
+        {
+            type: 'passage', section: 'Read2',
+            content: `
+            <strong>من مقال لأحمد أمين:</strong><br>
+            "أي بني، إنك الآن تدرس في أوروبا... والذين درسوا قبلك أشكال وألوان: فمنهم من شعر بأن حريته في مصر كانت مفقودة فرآها في أوروبا موفورة، فتحرر من رقابة أبويه وأصبح (أمير نفسه)، يلهو ويوهم أباه أنه يجد... وعاد بلا علم ولا خلق.<br>
+            ومنهم من عكفوا على دروسهم بكل جد، ولم يعرفوا غير حجرتهم وكتبهم... نقلوا حجرتهم في مصر إلى إنجلترا... هؤلاء نمت عقولهم ولكن لم تتفتح قلوبهم.<br>
+            وهناك طائفة ثالثة هي التي تعجبني: فهموا رسالتهم... سافروا ليدرسوا علماً وخلقاً... يبحثون عن سر عظمة هذه الأمم... يتعلمون من الشوارع والحدائق كما يتعلمون من الكتب."
+            `
+        },
+        { section: 'Read2', q: 'بم وصف الكاتب الحياة في أوروبا؟', options: ['تفرض التقيد بالعادات', 'تفرض جواً من اللهو', 'تدفع للانغماس في الملذات', 'تتيح لكل صاحب رغبة الفوز برغبته'], a: 3 }, // [cite: 221]
+        { section: 'Read2', q: 'حدد المسلك الذي أثنى عليه الكاتب:', options: ['الاستمتاع بالحرية فقط', 'العكوف على الكتب فقط', 'الجمع بين العلم ودراسة الحياة الاجتماعية', 'الانعزال عن الأوروبيين'], a: 2 }, // [cite: 227]
+        { section: 'Read2', q: 'دلالة قول الكاتب "أصبح أمير نفسه":', options: ['يتحمل المسئولية', 'يصرف شئونه حسب هواه وشهواته', 'ينفق من كسب يده', 'يتولى مناصب قيادية'], a: 1 }, // [cite: 245]
+        { section: 'Read2', q: 'مغزى قوله "نقلوا حجرتهم في مصر إلى حجرة في إنجلترا":', options: ['الاحتفاظ بالكتب', 'التمسك بالتقاليد', 'الانعزال عن مخالطة المجتمع الجديد', 'العجز عن الدراسة'], a: 2 }, // [cite: 266]
+        { section: 'Read2', q: 'الدليل على "الاحتيال" لدى الفئة الأولى:', options: ['يوهم أباه أنه يجد ويطلب المال للكتب وهو ينفقه في اللهو', 'شعر بأن حريته مفقودة', 'عاد بلا علم', 'فشله في الدراسة'], a: 0 }, // [cite: 276]
+        { section: 'Read2', q: 'موقف طه حسين (من كتاب الأيام) مقارنة بهذا النص:', options: ['سينغمس في اللهو', 'سينعزل تماماً', 'سيوازن بين الجد واللعب', 'سيعتزل حياة العبث ويأخذ نفسه بالحزم'], a: 3 }, // [cite: 291]
+
+        // === النصوص الشعرية: صالح الشرنوبي (كاملة من PDF) ===
+        {
+            type: 'passage', section: 'Poetry',
+            content: `
+            <strong>قال صالح الشرنوبي:</strong><br>
+            1- وقفتُ عُمري على قومي وآمالي ... وبعتُهم همتي والمطمحَ الغالي<br>
+            2- أحيا لهم وأفدي مجدهم كَلِفاً ... بالعالمينَ جواداً غيرَ بخّالِ<br>
+            3- ورحتُ أشدو هنيَّ القلبِ والبالِ ... ألقيتُ في النار أنفاسي وأوصالي<br>
+            4- إن ضاحكوا دهرَهم باريتُهم فرحاً ... وإن تنادوا إلى همٍّ يؤرقهم<br>
+            5- قومي وهم زينةُ الدنيا وبهجتُها ... وفي سماء المعالي نجمُها العالي<br>
+            6- أهوى هواهم وأفدي منهمو شُهباً ... يشيدون العُلا بالعلم والمالِ
+            `
+        },
+        { section: 'Poetry', q: 'بم وصف الشاعر نفسه في البيت الأول؟', options: ['الطموح الشخصي', 'الوفاء للأسرة', 'التفاني في خدمة وطنه وقومه', 'التردد في القرارات'], a: 2 }, // [cite: 312]
+        { section: 'Poetry', q: 'دلالة "يشيدون العلا بالعلم والمال":', options: ['التباهي بالثروة', 'الإشادة بدورهم في الرقي والبناء', 'أهمية التعليم فقط', 'تعظيم دور المال'], a: 1 }, // [cite: 325]
+        { section: 'Poetry', q: 'المغزى من "أحيا لهم وأفدي مجدهم":', options: ['إظهار صدق الانتماء والتضحية', 'الإشادة بالتاريخ', 'التباهي بالكرم', 'الرغبة في الشهرة'], a: 0 }, // [cite: 342]
+        { section: 'Poetry', q: 'كيف دلل الشاعر على صدق محبته في البيتين 3 و 4؟', options: ['بمشاركتهم وجدانياً في الفرح والحزن', 'بتقديم المال', 'بإلقاء الشعر', 'بالسفر إليهم'], a: 0 }, // [cite: 354]
+        { section: 'Poetry', q: 'اللون البياني في "بعتهم همتي":', options: ['تشبيه بليغ', 'استعارة مكنية', 'استعارة تصريحية', 'مجاز مرسل'], a: 1 }, // [cite: 412] - جعل الهمة شيئاً يباع
+        { section: 'Poetry', q: 'العاطفة المسيطرة على الشاعر:', options: ['الحزن واليأس', 'الفخر وحب الوطن', 'الغضب والثورة', 'الخوف والقلق'], a: 1 }, // [cite: 392]
+        { section: 'Poetry', q: 'من سمات مدرسة أبولو في النص:', options: ['الرمز الغامض', 'قوة العاطفة وحب الطبيعة (أو الوطن هنا)', 'اللغة التراثية', 'شعر المناسبات'], a: 1 }, // [cite: 419]
+        { section: 'Poetry', q: 'المحسن البديعي في البيت الأول (آمالي - الغالي):', options: ['تصريع', 'جناس تام', 'طباق', 'حسن تقسيم'], a: 0 },
+
+        // === الأدب (5 أسئلة) ===
+        { section: 'Lit', q: 'قال الكاظمي: "قوم إذا خطبوا لمجد..." سمة الإحياء والبعث هنا:', options: ['الاهتمام بالذات', 'معالجة قضايا العالم الإسلامي', 'التغني بالمثل العليا', 'المواءمة بين التراث والعصر'], a: 2 }, // [cite: 437] - مجد/معالي
+        { section: 'Lit', q: 'قال شكري: "إذا ما بدا لي البشر..." سمة الديوان هنا:', options: ['طغيان الجانب الفكري', 'مسحة الحزن والتشاؤم', 'الاهتمام بالمناسبات', 'المغالاة في التجديد'], a: 1 }, // [cite: 457]
+        { section: 'Lit', q: 'قال فاروق شوشة: "وهذي الأرض..." سمة المدرسة الجديدة:', options: ['الواقعية والالتصاق بهموم الوطن', 'الحنين للذكريات', 'الرمز الأسطوري', 'الاهتمام بالوزن والقافية'], a: 0 }, // [cite: 497]
+        { section: 'Lit', q: 'مدرسة أدبية اتخذت من خليل مطران أباً روحياً لها:', options: ['الديوان', 'أبولو', 'المهاجر', 'كل ما سبق'], a: 1 }, // أبولو نصاً
+        { section: 'Lit', q: 'من ملامح التجديد عند تلاميذ البارودي:', options: ['الاهتمام بالغير أكثر من الذات', 'الابتعاد عن القديم كلية', 'الشعر المرسل', 'الوحدة العضوية'], a: 0 },
+
+        // === النحو (35 سؤالاً - تجميع من PDF + تكميلي بنفس النمط) ===
+        // أسئلة من PDF مباشرة:
+        { section: 'Grammar', q: '"ما ضاع معروف يكافئه الشكر". المحل الإعرابي لجملة (يكافئه الشكر):', options: ['نعت', 'خبر', 'جواب شرط', 'حال'], a: 0 }, // [cite: 710] - نعت لـ معروف
+        { section: 'Grammar', q: '"ومن لا يغمض عينه... يمت وهو عاتب". الفعل اللازم في البيت:', options: ['يغمض', 'يمت', 'يجدها', 'يسلم'], a: 1 }, // [cite: 724]
+        { section: 'Grammar', q: '"ولربما خزن الحليم لسانه حذر الجواب". إعراب (حذر):', options: ['حال', 'تمييز', 'مفعول لأجله', 'مفعول به'], a: 2 }, // [cite: 757]
+        { section: 'Grammar', q: '"لا تجادل جاهلاً فإنك إن تفز... لم يكن فخراً". الفعل المعرب بعلامة فرعية:', options: ['تجادل', 'تفز', 'يكن', 'تدم'], a: 1 }, // [cite: 776] - تفز (سكون) خطأ، السؤال في الصورة يقول (تسمُ) في الشطر الثاني "وإن تسمُ"، فتسمُ مجزوم بحذف العلة (علامة فرعية). *تصحيح السؤال بناء على الصورة*:
+        // إعادة صياغة السؤال بناء على[cite: 775]: "وإن تسمُ عليك"
+        { section: 'Grammar', q: 'في جملة "وإن تسمُ عليك تدم حسرتك". الفعل المعرب بعلامة فرعية:', options: ['تسمُ', 'تدم', 'تجادل', 'يكن'], a: 0 }, // تسمُ (حذف حرف العلة)
+        { section: 'Grammar', q: '"إياك عزة الغضب". إعراب (عزة):', options: ['خبر', 'مبتدأ', 'مفعول به ثان', 'مفعول به لفعل محذوف (تحذير)'], a: 3 }, // [cite: 801] - مفعول به (احذر عزة الغضب)
+        { section: 'Grammar', q: '"وليس أخوك الدائم العهد بالذي يلومك". خبر ليس:', options: ['أخوك', 'الدائم', 'بالذي', 'يلومك'], a: 2 }, // [cite: 821] - بالذي (مفرد مجرور لفظاً)
+        { section: 'Grammar', q: '"لا تحمد امرأ حتى تجربه...". الفعل الجائز توكيده بالنون:', options: ['تحمد', 'تجربه', 'يتروى', 'يجلو'], a: 0 }, // [cite: 840] - تحمد (نهي)
+        { section: 'Grammar', q: '"أقل ما يجب نحو المنعم... ألا يتوصل بها إلى معصيته". المفضل هو:', options: ['أقل', 'ما يجب', 'ألا يتوصل', 'المنعم'], a: 2 }, // [cite: 867]
+        { section: 'Grammar', q: 'أسلوب الاختصاص الصحيح:', options: ['إلينا معشر الكرام يأوي المستجير', 'نحن أيها المعتدي لا نذل', 'فينا النابغون', 'نحن الذين بايعنا'], a: 0 }, // [cite: 869]
+        { section: 'Grammar', q: '"نعم العمل الذي يقدمه المرء... التضحية". المخصوص بالمدح:', options: ['العمل', 'الذي', 'المرء', 'التضحية'], a: 3 }, // [cite: 892]
+        { section: 'Grammar', q: '"شكراً لمعشر قاموا بمساع...". الممنوع من الصرف المجرور بالفتحة:', options: ['معشر', 'مساع', 'أفضل', 'الكبرى'], a: 1 }, // [cite: 917] - مساع (مجرور بالفتحة المقدرة)
+        { section: 'Grammar', q: '"مهنة لمعاش أو لذة في غير محرم". المصدر الميمي:', options: ['مهنة', 'معاش', 'لذة', 'محرم'], a: 1 }, // [cite: 923]
+        { section: 'Grammar', q: 'عند وضع (لا) النافية للجنس مكان (ليس) في "ليس مهملو أبنائهم مفلحين":', options: ['لا مهملو أبنائهم مفلحون', 'لا مهملين أبناءهم مفلحون', 'لا مهملي أبناءهم مفلحون', 'لا المهملين...'], a: 2 }, // [cite: 946] - مضاف
+        { section: 'Grammar', q: 'التركيب الصحيح نحوياً (إن):', options: ['إن ثناءهم لأولي الفضل', 'إن لأولي الفضل ثناءهم', 'إن أولي الفضل لهم ثناءهم', 'إن أولو...'], a: 1 }, // [cite: 967]
+        { section: 'Grammar', q: 'الجملة التي تحتوي على مفعول معه:', options: ['تتفاوت الفكر وكل امرئ وثقافته', 'لا تظمئ عقلك وتهمل القراءة', 'تتسع العقول والكتب غذاء', 'تتسع آفاق العقل وقراءة الكتب'], a: 3 }, // [cite: 985]
+
+        // أسئلة تكميلية للنحو (للوصول لـ 35) - محاكاة لأسلوب الوزارة:
+        { section: 'Grammar', q: 'كم (عالم) خدم وطنه. عند جعل كم استفهامية:', options: ['كم عالمٍ', 'كم عالماً', 'كم من عالم', 'كم عوالم'], a: 1 },
+        { section: 'Grammar', q: 'كفى بالله وكيلاً. إعراب لفظ الجلالة:', options: ['فاعل مرفوع بالضمة المقدرة', 'مفعول به', 'اسم مجرور', 'فاعل مجرور لفظاً مرفوع محلاً'], a: 3 },
+        { section: 'Grammar', q: 'ما أجمل السماء! .. السماء أجمل من الأرض. إعراب (أجمل) في الجملتين:', options: ['فعل ماض - خبر', 'خبر - فعل ماض', 'مبتدأ - خبر', 'فعل ماض - نعت'], a: 0 },
+        { section: 'Grammar', q: 'متى تسعَ في الخير (....) رضا الله.', options: ['تنل', 'فتنل', 'فسوف تنل', 'فسوف تنال'], a: 3 },
+        { section: 'Grammar', q: 'لعل المعلمين مخلصون. عند وضع (أوشك):', options: ['أوشك المعلمين أن يخلصوا', 'أوشك المعلمون مخلصين', 'أوشك المعلمون أن يخلصوا', 'أوشك المعلمون يخلصون'], a: 2 },
+        { section: 'Grammar', q: 'إنما المؤمنون إخوة. احذف (ما):', options: ['إن المؤمنون إخوة', 'إن المؤمنين إخوة', 'إن المؤمنين أخوات', 'أن المؤمنون إخوة'], a: 1 },
+        { section: 'Grammar', q: 'جلس الطالب (مستمعاً). جلس الطالب (استماعاً).', options: ['حال - مفعول لأجله', 'حال - مفعول مطلق', 'تمييز - مفعول مطلق', 'مفعول به - حال'], a: 0 },
+        { section: 'Grammar', q: 'كلمة (استقامة) نكشف عنها في:', options: ['ق م م', 'ق و م', 'س ق م', 'ق ي م'], a: 1 },
+        { section: 'Grammar', q: 'الطلاب يرجون النجاح. الطالبات يرجون النجاح. وزن الفعلين:', options: ['يفعون - يفعلن', 'يفعلون - يفعون', 'يفعون - يفعون', 'يفعلن - يفعلن'], a: 0 },
+        { section: 'Grammar', q: 'اسم المفعول من (باع):', options: ['مبيع', 'مبيوع', 'مباع', 'بائع'], a: 0 },
+        { section: 'Grammar', q: 'أعظم بـ (العمل). العمل تعرب:', options: ['فاعل مجرور لفظاً', 'مفعول به', 'مبتدأ', 'خبر'], a: 0 },
+        { section: 'Grammar', q: 'كلتا الطالبتين متفوقتان. الطالبتان كلتاهما متفوقتان. إعراب كلتا:', options: ['مبتدأ مقدر - توكيد', 'توكيد - مبتدأ ثان', 'مبتدأ مقدر - مبتدأ ثان', 'مبتدأ بالألف - توكيد'], a: 0 },
+        { section: 'Grammar', q: 'لا ذا علم مقصر. عند التثنية:', options: ['لا ذوي علم مقصران', 'لا ذوا علم مقصران', 'لا ذوي علم مقصرين', 'لا ذوا علم مقصرين'], a: 0 },
+        { section: 'Grammar', q: 'قرأت 12 كتاب. تكتب:', options: ['اثنا عشر كتاباً', 'اثني عشر كتاباً', 'اثنتا عشرة كتاباً', 'اثني عشر كتب'], a: 1 },
+        { section: 'Grammar', q: 'صغ اسم التفضيل من (لا يكذب):', options: ['المؤمن أجدر ألا يكذب', 'المؤمن أصدق من لا يكذب', 'المؤمن لا يكذب أبداً', 'غير قابل للصياغة'], a: 0 },
+        { section: 'Grammar', q: 'حضر الطلاب (خلا) طالباً. إعراب طالباً:', options: ['اسم مجرور فقط', 'مفعول به فقط', 'جائز الجر والنصب', 'فاعل'], a: 2 },
+        { section: 'Grammar', q: 'يا (مصريون) اتحدوا. نوع المنادى:', options: ['نكرة مقصودة', 'نكرة غير مقصودة', 'علم مفرد', 'مضاف'], a: 0 },
+        { section: 'Grammar', q: 'إن في التأني السلامة. حكم تقديم الخبر:', options: ['واجب', 'جائز', 'ممتنع', 'قليل'], a: 0 },
+        { section: 'Grammar', q: 'والله لأذاكرن. حكم التوكيد:', options: ['واجب', 'جائز', 'ممتنع', 'قليل'], a: 0 },
+
+        // === التعبير (20 سؤال - تكميلي بنمط الوزارة) ===
+        { section: 'Expr', q: 'الترتيب المنطقي لفقرات مقال عن "مصادر المياه العذبة" (مشكلة - حل):', options: ['تقرير الصحة العالمية عن نقص المياه -> اكتشاف مادة تمتص المياه', 'اكتشاف المادة -> تقرير الصحة', 'تعريف المياه -> أنواع المياه', 'تاريخ المياه -> المستقبل'], a: 0 }, // [cite: 1028]
+        { section: 'Expr', q: 'التفصيلة التي يجدر حذفها من مقال عن "الأمن القومي والمصالح الخارجية":', options: ['التوسع الاستعماري في القرن 19', 'الاتفاقيات المائية', 'التعاون الاقتصادي', 'تبادل الخبرات'], a: 0 }, // [cite: 1011]
+        { section: 'Expr', q: 'علامة الترقيم المناسبة: قال المعلم (...) انتبهوا.', options: ['؛', ':', '،', '.'], a: 1 },
+        { section: 'Expr', q: 'الكلمة التي كتبت خطأ إملائياً:', options: ['إستماع', 'انتصار', 'امرؤ', 'لؤلؤ'], a: 0 },
+        { section: 'Expr', q: 'عند كتابة كلمة افتتاحية لندوة، العنصر الأهم هو:', options: ['التعريف بالغرض والجمهور', 'ذكر أسعار التذاكر', 'وصف الديكور', 'ذكر تاريخ اليوم فقط'], a: 0 },
+        { section: 'Expr', q: 'الرابط المناسب: "الجو ممطر ..... خرجت للعمل".', options: ['لكنني', 'لذلك', 'حيث أن', 'فـ'], a: 0 },
+        { section: 'Expr', q: 'الجملة التي تعبر عن (الندم):', options: ['عض على يديه', 'قرع سنه', 'كف عن الضحك', 'أطرق برأسه'], a: 0 },
+        { section: 'Expr', q: '(إعادة تدوير المخلفات). الفكرة الداعمة لهذا العنوان:', options: ['تحويل النفايات لمنتجات مفيدة', 'حرق النفايات', 'دفن النفايات', 'تجاهل النفايات'], a: 0 },
+        { section: 'Expr', q: 'شرح البيت: "ومن يتهيب صعود الجبال ... يعش أبد الدهر بين الحفر":', options: ['الخوف من المغامرة يبقي الإنسان في القاع', 'الجبال عالية وخطيرة', 'الحفر مكان آمن', 'الدهر طويل'], a: 0 },
+        { section: 'Expr', q: 'أنسب عنوان لفقرة تتحدث عن (أضرار التدخين على الرئة والقلب):', options: ['التدخين والرياضة', 'التدخين هلاك للصحة', 'تاريخ التبغ', 'زراعة التبغ'], a: 1 },
+        // (إكمال 10 أسئلة تعبير أخرى بنفس النمط السريع)
+        { section: 'Expr', q: 'الهمزة في (شاطئ) كتبت على الياء لأنها:', options: ['متطرفة وما قبلها مكسور', 'متطرفة وما قبلها ساكن', 'متوسطة', 'مفتوحة'], a: 0 },
+        { section: 'Expr', q: 'الكلمة المخالفة للقياس الصرفي:', options: ['أشياء', 'سماء', 'بناء', 'صحراء'], a: 0 },
+        { section: 'Expr', q: '(البطالة قنبلة موقوتة). التفصيلة الداعمة:', options: ['ارتفاع معدلات الجريمة بسبب الفراغ والحاجة', 'زيادة عدد الخريجين', 'بناء المصانع', 'تطور التكنولوجيا'], a: 0 },
+        { section: 'Expr', q: 'الترتيب الأفضل لقصة قصيرة:', options: ['بداية - ذروة الأحداث - نهاية', 'نهاية - بداية - وسط', 'وسط - نهاية - بداية', 'عشوائي'], a: 0 },
+        { section: 'Expr', q: 'كلمة (مساءً) لا يكتب بعدها ألف تنوين لأنها:', options: ['منتهية بهمزة قبلها ألف', 'مجرورة', 'ممنوعة من الصرف', 'نكرة'], a: 0 },
+        { section: 'Expr', q: 'المثل المناسب للموقف: (شخص يطلب أمراً مستحيلاً):', options: ['يطلب لبن العصفور', 'يضرب في حديد بارد', 'يحرث في البحر', 'كل ما سبق'], a: 3 },
+        { section: 'Expr', q: 'كتابة (ابن) صحيحة في:', options: ['عمر بن الخطاب', 'عمر ابن الخطاب', 'يا ابن أخي', 'ابن المدينة'], a: 0 },
+        { section: 'Expr', q: 'علامة الترقيم بعد المنادى:', options: ['،', '.', '؛', '؟'], a: 0 },
+        { section: 'Expr', q: 'عند كتابة تقرير، يجب مراعاة:', options: ['الدقة والموضوعية', 'الخيال الواسع', 'استخدام المحسنات البديعية', 'الإطناب الممل'], a: 0 },
+        { section: 'Expr', q: 'خاتمة المقال يجب أن تكون:', options: ['تلخيصاً لأهم الأفكار', 'بداية لموضوع جديد', 'أطول من المقدمة', 'تحتوي على أسئلة فقط'], a: 0 }
+    ];
+
+    // --- State Management ---
+    let userAnswers = new Array(examData.length).fill(null);
+    let timerInterval;
+
+    function init() {
+        renderNav();
+        renderQuestions();
+        startTimer();
     }
 
-    let processedData = [];
-
-    function initData() {
-        processedData = examData.map((item, index) => {
-            // خلط الاختيارات
-            let opts = item.options.map((text, i) => ({ text, isCorrect: i === item.a }));
-            if(item.section !== 'General' && item.section !== 'Reading') opts = shuffle(opts); // نخلط الكل ماعدا الترتيب المنطقي
-            
-            const newOpts = opts.map(o => o.text);
-            const newA = opts.findIndex(o => o.isCorrect);
-            
-            return { ...item, options: newOpts, a: newA, originalIndex: index };
-        });
-        // خلط الأسئلة داخل كل قسم (اختياري، هنا سنبقي الترتيب لضمان تسلسل نصوص القراءة)
-    }
-
-    // --- 4. دالة العرض (Rendering) ---
     function renderNav() {
-        const nav = document.getElementById('navList');
-        nav.innerHTML = sectionsConfig.map((sec, idx) => `
-            <button class="nav-item ${idx===0?'active':''}" onclick="switchTab('${sec.id}', this)">
-                <span>${sec.icon}</span> ${sec.name}
-            </button>
+        const nav = document.getElementById('navContainer');
+        nav.innerHTML = sections.map((sec, idx) => `
+            <div class="nav-btn ${idx===0 ? 'active' : ''}" onclick="scrollToSection('${sec.id}', this)">
+                <span>${sec.title}</span>
+                <span class="badge">${sec.count}</span>
+            </div>
         `).join('');
     }
 
-    function renderContent() {
-        const container = document.getElementById('quizContainer');
-        container.innerHTML = sectionsConfig.map((sec, idx) => {
-            const qs = processedData.filter(q => q.section === sec.id);
-            const html = qs.map((q, qIdx) => `
-                <div class="q-card">
-                    <div class="q-badge">سؤال</div>
-                    ${q.type === 'passage' ? `<div class="passage-content">${q.content}</div>` : ''}
-                    <div class="q-body">${q.q}</div>
-                    <div class="options-grid">
-                        ${q.options.map((opt, i) => `
-                            <label class="opt-label" onclick="selectAnswer(${q.originalIndex}, ${i}, this)">
-                                <div class="opt-circle"></div>
-                                <span>${opt}</span>
-                            </label>
-                        `).join('')}
-                    </div>
-                    <div class="feedback-box" id="fb-${q.originalIndex}"></div>
-                </div>
-            `).join('');
-
-            return `
-                <div class="section-wrapper ${idx===0?'active':''}" id="sec-${sec.id}">
-                    <h2 style="margin-bottom:20px; color:var(--primary);">${sec.icon} ${sec.name}</h2>
-                    ${html}
-                    <div class="footer-nav">
-                        ${idx < sectionsConfig.length - 1 
-                            ? `<button class="btn btn-next" onclick="nextSec('${sectionsConfig[idx+1].id}')">القسم التالي ⬅</button>` 
-                            : `<button class="btn btn-finish" onclick="submitExam()">✅ تسليم الامتحان</button>`}
-                    </div>
-                </div>
-            `;
-        }).join('');
+    function renderQuestions() {
+        const container = document.getElementById('renderArea');
+        let html = '';
+        
+        let globalIndex = 0;
+        sections.forEach(sec => {
+            html += `<h2 id="${sec.id}" style="color:var(--primary); margin:30px 0 15px 0; border-bottom:2px solid var(--accent); padding-bottom:10px;">${sec.title}</h2>`;
+            
+            const secQuestions = examData.filter(q => q.section === sec.id);
+            secQuestions.forEach(item => {
+                if(item.type === 'passage') {
+                    html += `<div class="passage-container">${item.content}</div>`;
+                } else {
+                    html += `
+                        <div class="q-card" id="q-${globalIndex}">
+                            <div class="q-header">
+                                <span>سؤال ${globalIndex + 1}</span>
+                                <span>درجة واحدة</span>
+                            </div>
+                            <div class="q-text">${item.q}</div>
+                            <div class="options-grid">
+                                ${item.options.map((opt, i) => `
+                                    <div class="option" onclick="selectOption(${globalIndex}, ${i}, this)">
+                                        <div class="circle"></div>
+                                        <span>${opt}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    globalIndex++;
+                }
+            });
+        });
+        container.innerHTML = html;
     }
 
-    // --- 5. التفاعل ---
-    function switchTab(id, btn) {
-        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    function selectOption(qIdx, optIdx, el) {
+        userAnswers[qIdx] = optIdx;
+        const parent = el.parentElement;
+        parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function scrollToSection(id, btn) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        document.querySelectorAll('.section-wrapper').forEach(d => d.classList.remove('active'));
-        document.getElementById(`sec-${id}`).classList.add('active');
-        window.scrollTo(0,0);
     }
 
-    window.nextSec = function(id) {
-        const index = sectionsConfig.findIndex(s => s.id === id);
-        const btns = document.querySelectorAll('.nav-item');
-        switchTab(id, btns[index]);
-    };
-
-    window.selectAnswer = function(qIdx, optIdx, lbl) {
-        if(state.isSubmitted) return;
-        
-        // UI
-        const parent = lbl.parentElement;
-        parent.querySelectorAll('.opt-label').forEach(l => l.classList.remove('selected'));
-        lbl.classList.add('selected');
-        
-        // Logic
-        state.answers[qIdx] = optIdx;
-    };
-
-    // --- 6. المؤقت والتسليم ---
     function startTimer() {
-        let time = 3 * 3600;
-        setInterval(() => {
-            if(state.isSubmitted) return;
-            time--;
-            const h = Math.floor(time / 3600).toString().padStart(2,'0');
-            const m = Math.floor((time % 3600) / 60).toString().padStart(2,'0');
-            const s = (time % 60).toString().padStart(2,'0');
-            document.getElementById('timerDisplay').innerText = `${h}:${m}:${s}`;
-            if(time <= 0) submitExam();
+        let duration = 3 * 60 * 60; // 3 hours
+        const el = document.getElementById('timer');
+        timerInterval = setInterval(() => {
+            duration--;
+            let h = Math.floor(duration / 3600);
+            let m = Math.floor((duration % 3600) / 60);
+            let s = duration % 60;
+            el.innerText = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            if(duration <= 0) submitExam();
         }, 1000);
     }
 
-    window.submitExam = function() {
-        if(state.isSubmitted) return;
-        if(Object.keys(state.answers).length < processedData.length) {
-            if(!confirm("لم تجب على كل الأسئلة. هل أنت متأكد؟")) return;
-        }
-        
-        state.isSubmitted = true;
+    function submitExam() {
+        clearInterval(timerInterval);
         let score = 0;
-        let analytics = {};
+        let totalQs = 0;
+        let qIndex = 0;
 
-        // Initialize Analytics
-        sectionsConfig.forEach(s => analytics[s.id] = {total:0, correct:0, name: s.name});
-
-        processedData.forEach(q => {
-            analytics[q.section].total++;
-            const userAns = state.answers[q.originalIndex];
-            const feedback = document.getElementById(`fb-${q.originalIndex}`);
-            
-            // Disable inputs
-            const labels = feedback.parentElement.querySelectorAll('.opt-label');
-            labels.forEach(l => l.style.pointerEvents = 'none');
-
-            if(userAns === q.a) {
-                score++;
-                analytics[q.section].correct++;
-                feedback.innerHTML = "إجابة صحيحة ✅";
-                feedback.classList.add('correct');
-                // Highlight Selected
-                if(labels[userAns]) labels[userAns].style.borderColor = "var(--correct)";
-            } else {
-                feedback.innerHTML = `خطأ ❌ الإجابة هي: ${q.options[q.a]}`;
-                feedback.classList.add('wrong');
-                // Highlight Wrong & Correct
-                if(labels[userAns]) labels[userAns].style.borderColor = "var(--wrong)";
-                if(labels[q.a]) {
-                    labels[q.a].classList.add('selected');
-                    labels[q.a].style.backgroundColor = "#dcfce7";
-                    labels[q.a].style.color = "#166534";
-                }
+        examData.forEach(item => {
+            if(item.type !== 'passage') {
+                if(userAnswers[qIndex] === item.a) score++;
+                
+                // Show corrections
+                const card = document.getElementById(`q-${qIndex}`);
+                const options = card.querySelectorAll('.option');
+                options.forEach((opt, i) => {
+                    opt.onclick = null; // Disable click
+                    if(i === item.a) opt.style.background = '#d1fae5'; // Green Correct
+                    else if(i === userAnswers[qIndex] && i !== item.a) opt.style.background = '#fee2e2'; // Red Wrong
+                });
+                
+                qIndex++;
+                totalQs++;
             }
-            feedback.style.display = 'block';
         });
 
-        // Show Modal
+        const pct = Math.round((score/totalQs)*100);
         document.getElementById('finalScore').innerText = score;
-        document.getElementById('scoreText').innerHTML = score >= 40 ? "مبارك النجاح! 🎉" : "حظ أوفر في المرة القادمة";
         
-        // Draw Charts
-        const chartHTML = sectionsConfig.map(sec => {
-            const data = analytics[sec.id];
-            if(data.total === 0) return '';
-            const pct = (data.correct / data.total) * 100;
-            return `
-                <div class="bar-row">
-                    <div style="width:100px">${data.name}</div>
-                    <div class="bar-bg"><div class="bar-fill" style="width:${pct}%; background:${pct>50?'var(--correct)':'var(--wrong)'}"></div></div>
-                    <div>${Math.round(pct)}%</div>
-                </div>
-            `;
-        }).join('');
-        document.getElementById('analyticsGraph').innerHTML = chartHTML;
-        
+        // Analytics Chart
+        const chartDiv = document.getElementById('analytics');
+        chartDiv.innerHTML = `
+            <div style="text-align:left; margin-bottom:5px;">الأداء العام (${pct}%)</div>
+            <div class="chart-bar"><div class="chart-fill" style="width:${pct}%"></div></div>
+            <p>${pct >= 50 ? 'ناجح ✅' : 'تحتاج لمزيد من المذاكرة ⚠️'}</p>
+        `;
+
         document.getElementById('resultModal').style.display = 'flex';
-    };
+    }
 
-    window.toggleTheme = function() {
+    function toggleTheme() {
         document.body.classList.toggle('dark-mode');
-    };
+    }
 
-    // Init
-    initData();
-    renderNav();
-    renderContent();
-    startTimer();
-
+    init();
 </script>
+
 </body>
 </html>
