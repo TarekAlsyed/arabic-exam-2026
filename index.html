@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>امتحان اللغة العربية (نظام التابلت) - محاكاة دور أول 2024</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <title>امتحان اللغة العربية (نظام التابلت) - الدور الأول 2024</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1e3a8a; /* أزرق وزاري داكن */
+            --primary: #1e3a8a;
             --primary-light: #3b82f6;
-            --accent: #d97706; /* ذهبي */
+            --accent: #d97706;
             --bg-body: #f3f4f6;
             --bg-card: #ffffff;
             --text-main: #1f2937;
             --text-light: #6b7280;
             --border: #e5e7eb;
-            --success: #10b981;
-            --error: #ef4444;
+            --selected: #eff6ff;
+            --selected-border: #2563eb;
+            --correct-bg: #dcfce7;
+            --correct-border: #16a34a;
+            --wrong-bg: #fee2e2;
+            --wrong-border: #dc2626;
         }
 
         body.dark-mode {
@@ -28,9 +32,15 @@
             --text-main: #f9fafb;
             --text-light: #9ca3af;
             --border: #374151;
+            --selected: #1e3a8a;
+            --selected-border: #60a5fa;
+            --correct-bg: #064e3b;
+            --correct-border: #34d399;
+            --wrong-bg: #7f1d1d;
+            --wrong-border: #f87171;
         }
 
-        * { box-sizing: border-box; transition: background-color 0.3s, border-color 0.3s, color 0.3s; outline: none; }
+        * { box-sizing: border-box; transition: background-color 0.3s, border-color 0.3s; outline: none; }
         
         body {
             font-family: 'Tajawal', sans-serif;
@@ -42,7 +52,7 @@
             overflow: hidden;
         }
 
-        /* --- Sidebar Navigation --- */
+        /* --- Sidebar --- */
         .sidebar {
             width: 280px;
             background: var(--bg-card);
@@ -86,7 +96,7 @@
         .passage-card {
             background: var(--bg-card); border-radius: 12px; padding: 25px;
             margin-bottom: 25px; border-right: 5px solid var(--accent);
-            line-height: 2; font-size: 1.1rem; text-align: justify;
+            line-height: 2; font-size: 1.15rem; text-align: justify;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05); color: var(--text-main);
         }
 
@@ -109,22 +119,45 @@
         .option {
             background: var(--bg-body); padding: 15px 20px; border-radius: 8px;
             cursor: pointer; border: 2px solid transparent; display: flex;
-            align-items: center; gap: 15px; font-weight: 500;
+            align-items: center; gap: 15px; font-weight: 500; position: relative;
         }
 
         .option:hover { border-color: var(--primary-light); }
-        .option.selected { background: var(--primary); color: white; border-color: var(--primary); }
         
+        /* Selected State (Before Submit) */
+        .option.selected {
+            background: var(--selected);
+            border-color: var(--selected-border);
+            font-weight: 700;
+        }
+
         .circle {
             width: 22px; height: 22px; border-radius: 50%; border: 2px solid #ccc;
             flex-shrink: 0; display: flex; justify-content: center; align-items: center;
         }
-        .option.selected .circle { border-color: white; background: white; }
-        .option.selected .circle::after { content: '✓'; color: var(--primary); font-size: 14px; font-weight: bold; }
+        .option.selected .circle { border-color: var(--primary); background: var(--primary); }
+        .option.selected .circle::after { content: '✓'; color: white; font-size: 14px; font-weight: bold; }
 
-        /* Correct/Wrong Feedback Styling */
-        .option.correct-answer { background: #d1fae5 !important; border-color: var(--success) !important; color: #065f46 !important; }
-        .option.wrong-answer { background: #fee2e2 !important; border-color: var(--error) !important; color: #991b1b !important; }
+        /* --- Correction Modes (After Submit) --- */
+        body.review-mode .option { pointer-events: none; } /* Disable clicking */
+        
+        /* Correct Answer Styling */
+        body.review-mode .option.is-correct {
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: #065f46 !important;
+        }
+        body.review-mode .option.is-correct .circle { background: var(--correct-border); border-color: var(--correct-border); }
+        body.review-mode .option.is-correct .circle::after { content: '✓'; color: white; }
+
+        /* Wrong User Selection Styling */
+        body.review-mode .option.is-wrong {
+            background-color: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: #991b1b !important;
+        }
+        body.review-mode .option.is-wrong .circle { background: var(--wrong-border); border-color: var(--wrong-border); }
+        body.review-mode .option.is-wrong .circle::after { content: '✕'; color: white; }
 
         /* --- Footer & Tools --- */
         .tools-area { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); }
@@ -145,20 +178,25 @@
         /* --- Modal --- */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 1000; display: none;
+            background: rgba(0,0,0,0.95); z-index: 2000; display: none;
             justify-content: center; align-items: center; backdrop-filter: blur(5px);
         }
         .modal-content {
-            background: var(--bg-card); width: 90%; max-width: 500px;
+            background: var(--bg-card); width: 90%; max-width: 600px;
             padding: 40px; border-radius: 20px; text-align: center;
             max-height: 90vh; overflow-y: auto; color: var(--text-main);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
         .score-circle {
-            width: 120px; height: 120px; border-radius: 50%;
+            width: 150px; height: 150px; border-radius: 50%;
             background: var(--bg-body); color: var(--primary);
             display: flex; justify-content: center; align-items: center;
-            font-size: 3rem; font-weight: 900; margin: 20px auto;
-            border: 6px solid var(--primary);
+            font-size: 3.5rem; font-weight: 900; margin: 20px auto;
+            border: 8px solid var(--primary);
+        }
+        .feedback-box {
+            background: var(--bg-body); padding: 15px; border-radius: 10px;
+            margin: 20px 0; text-align: right; border-right: 4px solid var(--accent);
         }
 
         /* Mobile Responsive */
@@ -169,7 +207,7 @@
                 padding: 10px; order: 2; border-top: 1px solid var(--border); border-left: none;
             }
             .brand { display: none; }
-            .tools-area { display: none; } /* Timer moves to top on mobile via JS if needed, or stick to bottom */
+            .tools-area { display: none; } 
             .nav-items { flex-direction: row; overflow-x: auto; }
             .nav-btn { white-space: nowrap; padding: 8px 12px; font-size: 0.9rem; }
             .main-content { padding: 15px; padding-bottom: 80px; }
@@ -181,7 +219,7 @@
 <aside class="sidebar">
     <div class="brand">
         <span>🎓 منصة الوزارة</span>
-        <span style="font-size:0.8rem; color:var(--accent); margin-right:auto;">2026</span>
+        <span style="font-size:0.8rem; color:var(--accent); margin-right:auto;">2024</span>
     </div>
     
     <div class="nav-items" id="navContainer">
@@ -191,7 +229,7 @@
         <div class="timer-box" id="timer">03:00:00</div>
         <div class="action-btns">
             <button class="btn btn-theme" onclick="toggleTheme()">🌙 مظهر</button>
-            <button class="btn btn-submit" onclick="submitExam()">تسليم الورقة</button>
+            <button class="btn btn-submit" id="submitBtnMain" onclick="submitExam()">تسليم الورقة</button>
         </div>
     </div>
 </aside>
@@ -201,32 +239,41 @@
 
 <div class="modal" id="resultModal">
     <div class="modal-content">
-        <h2 style="margin:0;">نتيجة الامتحان</h2>
+        <h2 style="margin:0; color:var(--primary);">نتيجة الامتحان</h2>
         <div class="score-circle" id="finalScore">0</div>
-        <p style="font-size:1.2rem; color:var(--text-light);">من إجمالي 80 درجة</p>
-        <div id="analyticsGraph" style="margin-top:20px; text-align:right;"></div>
-        <button class="btn btn-submit" onclick="location.reload()" style="width:100%; margin-top:20px; padding:15px;">امتحان جديد</button>
+        <p style="font-size:1.2rem; font-weight:bold;">من إجمالي 80 درجة</p>
+        
+        <div class="feedback-box">
+            <h3 style="margin-top:0;">📝 تقرير الأداء والتوصيات:</h3>
+            <div id="feedbackText">...</div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button class="btn btn-submit" onclick="startReviewMode()" style="background:var(--primary);">🔍 مراجعة ورقة الإجابة (تصحيح)</button>
+            <button class="btn btn-theme" onclick="location.reload()">🔄 امتحان جديد</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // --- 1. قاعدة البيانات الكاملة (80 سؤال - نصي حرفي) ---
+    // --- 1. قاعدة البيانات (80 سؤال - نصي حرفي من الرسالة) ---
     
     const sectionsConfig = [
-        { id: 'Read1', title: 'القراءة: آثار الحروب', count: 6 },
-        { id: 'Read2', title: 'القراءة: أحمد أمين', count: 6 },
-        { id: 'Poetry', title: 'نصوص: الشرنوبي', count: 8 },
-        { id: 'Lit', title: 'الأدب (المدارس)', count: 5 },
-        { id: 'Grammar', title: 'النحو (35 سؤال)', count: 35 },
-        { id: 'Expr', title: 'التعبير', count: 20 }
+        { id: 'Read1', title: 'أولاً: القراءة العلمية', count: 6 },
+        { id: 'Read2', title: 'ثانياً: القراءة الأدبية', count: 6 },
+        { id: 'Poetry', title: 'ثالثاً: النصوص', count: 8 },
+        { id: 'Lit', title: 'رابعاً: الأدب', count: 5 },
+        { id: 'Grammar', title: 'خامساً: النحو', count: 35 },
+        { id: 'Expr', title: 'سادساً: التعبير', count: 20 }
     ];
 
+    // ملاحظة: a: Index of Correct Answer (0 = أ, 1 = ب, 2 = ج, 3 = د)
     const examData = [
-        // --- أولاً: القراءة المتحررة (المقال العلمي) ---
+        // === أولاً: القراءة المتحررة (المقال العلمي) ===
         {
             type: 'passage', section: 'Read1',
             content: `
-            <strong>أولاً: القراءة المتحررة (المقال العلمي)</strong><br>
+            <strong>أولاً: القراءة المتحررة (المقال العلمي)</strong><br><br>
             "عادة تقع الحروب بين طرفي نزاع فشلا في إيجاد مساحة للتفاهم لتحقيق مصلحة مشتركة أو في إيجاد أرضية للاتفاق على حل للنزاع، فيقع الضحايا قتلى وجرحى من الطرفين، وتدمر مرافق ومساكن، وتختفي معالم المدنية، ويحل مكانها مشاهد الخراب والدمار. ويقع هذا كله في نطاق البيئة؛ فهي بأبعادها مسرح النزاع، والمتضررة بآثاره وتبعاته على المدى القريب والبعيد. والضرر الواقع على البيئة من جراء الحروب يتمثل في تلف الأنظمة البيئية، واستنزاف الموارد الطبيعية وغيرها، مما يبقى تأثيره على المدى البعيد الذي قد يمتد حقبًا بعد انتهاء الصراع.<br><br>
             ومن صور الإضرار بالبيئة نتيجة الحروب: تسميم المياه الجوفية، والقضاء على الحياة البرية، وتلويث مياه الأنهار والبحار، وتلوث الهواء، وتدمير الغابات والغطاء النباتي للأرض، وإتلاف المحاصيل والمزروعات التي تعد مصدراً للغذاء. ومن أمثلة ما أحدثته الحروب من دمار البيئة: ما سببته الحرب الروسية الأوكرانية من إنتاج 100 مليون طن من مركبات الكربون الضارة في مدة لا تتجاوز 7 أشهر، وإسقاط الجيش الأمريكي في الحرب الفيتنامية حوالي 200 ألف طن من مبيدات الأعشاب على الغابات، مما نتج عنه تسميم المياه وتعرية مساحات واسعة.<br><br>
             كذلك تجريف الاحتلال الإسرائيلي الأراضي الزراعية الفلسطينية، واقتلاعه ما يقرب من 2.5 مليون شجرة مثمرة منها 800 ألف شجرة زيتون منذ 1967م، فضلاً عن تلويث الهواء بمركبات الفوسفور السامة الناتجة عن القنابل الفوسفورية؛ حيث تترسب في التربة والمياه لفترات ممتدة، وتسبب حروقاً وأمراضاً للأحياء. وقد حذرت اللجنة الدولية للصليب الأحمر بأن تغير المناخ له عواقب مدمرة على الأشخاص الذين يعيشون في مناطق الصراع."
@@ -243,7 +290,7 @@
         {
             type: 'passage', section: 'Read2',
             content: `
-            <strong>ثانياً: القراءة المتحررة (المقال الأدبي - أحمد أمين)</strong><br>
+            <strong>ثانياً: القراءة المتحررة (المقال الأدبي - أحمد أمين)</strong><br><br>
             "أي بني، إنك الآن تدرس في أوروبا بعد أن أتممت دراستك في مصر، والذين درسوا قبلك في أوروبا أشكال وألوان؛ اختلفت منازعهم واختلفت اتجاهاتهم، واختلفوا في مقدار نجاحهم وفشلهم. فمنهم من شعر بأن حريته في مصر كانت مفقودة، فرآها في أوروبا موفورة؛ فقد تحرر من رقابة أبويه ومدرسته، وأصبح (أمير نفسه)، فهو يلهو ويوهم أباه أنه يجد، ويحتال عليه في تحصيل المال بكل وسيلة... وأخيراً تنكشف الأمور عن مأساة ويعود إلى بلده ولا علم له ولا خلق.<br><br>
             ومن الدارسين في أوروبا من عكفوا على دروسهم بكل جد، ولم يعرفوا غير حجرتهم وكتبهم وجامعتهم... قد نقلوا حجرتهم في مصر إلى حجرة في إنجلترا أو فرنسا... هؤلاء قد نمت عقولهم وغزر علمهم، ولكنهم لم تتفتح قلوبهم ولم ترق نفوسهم.<br><br>
             وهناك طائفة ثالثة هي التي تعجبني وهي التي أحب أن تسير على نهجها: هؤلاء قد فهموا رسالتهم من بعثتهم على الوجه الأكمل، فهموا أنهم إنما سافروا ليدرسوا علماً، وليدرسوا خلقاً... يبحثون عن سر عظمة هذه الأمم، ومواطن قوتها وضعفها... يتعلمون هذه الدروس مما تقع عليه العين المفتوحة والقلب الواعي في الشوارع والحدائق."
@@ -260,7 +307,7 @@
         {
             type: 'passage', section: 'Poetry',
             content: `
-            <strong>ثالثاً: النصوص الشعرية (مدرسة أبولو - صالح الشرنوبي)</strong><br>
+            <strong>ثالثاً: النصوص الشعرية (مدرسة أبولو - صالح الشرنوبي)</strong><br><br>
             1. وَقَفتُ عُمري عَلى قَومي وَآمالي ... وَبِعتُهُم هِمَّتي وَالمَطمَحَ الغالي<br>
             2. أَحيا لَهُم وَأَفدي مَجدَهُم كَلِفاً ... بِالعالَمينَ جَواداً غَيرَ بَخّالِ<br>
             3. وَرُحتُ أَشدو هَنِيَّ القَلبِ وَالبالِ ... أَلقَيتُ في النارِ أَنفاسي وَأَوصالي<br>
@@ -348,10 +395,11 @@
     // --- State & Logic ---
     let userAnswers = new Array(examData.length).fill(null);
     let timerInterval;
+    let isSubmitted = false;
 
     function init() {
         renderNav();
-        renderContent();
+        renderQuestions();
         startTimer();
     }
 
@@ -365,60 +413,48 @@
         `).join('');
     }
 
-    // Shuffle options array but keep correct answer tracked
-    function shuffleOptions(opts, correctIndex) {
-        let arr = opts.map((val, i) => ({ val, i }));
-        // Only shuffle if it's NOT the first section (Reading) to keep logic if needed, 
-        // But for options we generally want shuffle.
-        // Simple Fisher-Yates
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return {
-            shuffled: arr.map(a => a.val),
-            newCorrectIndex: arr.findIndex(a => a.i === correctIndex)
-        };
-    }
-
-    // We need to process examData once to shuffle options for this session
-    let processedData = examData.map(item => {
-        if(item.type === 'passage') return item;
-        let shuffled = shuffleOptions(item.options, item.a);
-        return { ...item, options: shuffled.shuffled, a: shuffled.newCorrectIndex };
-    });
-
-    function renderContent() {
+    function renderQuestions() {
         const container = document.getElementById('renderArea');
         let html = '';
-        let qGlobalIndex = 0;
+        let globalIndex = 0;
 
         sectionsConfig.forEach(sec => {
             html += `<div id="${sec.id}" class="header-section"><h2 class="section-title">${sec.title}</h2></div>`;
             
-            const items = processedData.filter(d => d.section === sec.id);
+            const items = examData.filter(d => d.section === sec.id);
             items.forEach(item => {
                 if(item.type === 'passage') {
                     html += `<div class="passage-card">${item.content}</div>`;
                 } else {
+                    // Create Option HTML
+                    let optionsHTML = '';
+                    item.options.forEach((opt, i) => {
+                        // Mark correct/wrong classes for Review Mode (initially invisible due to CSS)
+                        let extraClass = '';
+                        if (i === item.a) extraClass += ' is-correct';
+                        else extraClass += ' is-wrong';
+
+                        optionsHTML += `
+                            <div class="option ${extraClass}" onclick="selectOption(${globalIndex}, ${i}, this)" id="opt-${globalIndex}-${i}">
+                                <div class="circle"></div>
+                                <span>${opt}</span>
+                            </div>
+                        `;
+                    });
+
                     html += `
-                        <div class="q-card" id="q-${qGlobalIndex}">
+                        <div class="q-card" id="q-${globalIndex}">
                             <div class="q-header">
-                                <span>سؤال ${qGlobalIndex + 1}</span>
+                                <span>سؤال ${globalIndex + 1}</span>
                                 <span>درجة واحدة</span>
                             </div>
                             <div class="q-text">${item.q}</div>
                             <div class="options-grid">
-                                ${item.options.map((opt, i) => `
-                                    <div class="option" onclick="selectOption(${qGlobalIndex}, ${i}, this)">
-                                        <div class="circle"></div>
-                                        <span>${opt}</span>
-                                    </div>
-                                `).join('')}
+                                ${optionsHTML}
                             </div>
                         </div>
                     `;
-                    qGlobalIndex++;
+                    globalIndex++;
                 }
             });
         });
@@ -426,8 +462,10 @@
     }
 
     function selectOption(qIdx, optIdx, element) {
+        if (isSubmitted) return; // Prevent changing answers after submit
+
         userAnswers[qIdx] = optIdx;
-        // Visual update
+        // Visual update (Blue Highlight only)
         const parent = element.parentElement;
         parent.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
         element.classList.add('selected');
@@ -453,45 +491,58 @@
     }
 
     function submitExam() {
+        if (isSubmitted) return;
+        
+        let answeredCount = userAnswers.filter(a => a !== null).length;
+        if(answeredCount < 80) {
+            if(!confirm(`لقد أجبت على ${answeredCount} من 80 سؤالاً. هل أنت متأكد من التسليم؟`)) return;
+        }
+
+        isSubmitted = true;
         clearInterval(timerInterval);
+        document.getElementById('submitBtnMain').disabled = true;
+        document.getElementById('submitBtnMain').innerText = "تم التسليم";
+
+        // Calculate Score
         let score = 0;
-        let totalQuestions = 0;
-        let qIndex = 0;
+        let grammarScore = 0; // Tracking for feedback
+        let readingScore = 0;
 
-        processedData.forEach(item => {
+        examData.forEach((item, index) => {
             if(item.type !== 'passage') {
-                const isCorrect = userAnswers[qIndex] === item.a;
-                if(isCorrect) score++;
-                
-                // Show correction
-                const card = document.getElementById(`q-${qIndex}`);
-                const opts = card.querySelectorAll('.option');
-                
-                opts.forEach((opt, i) => {
-                    opt.onclick = null; // Disable clicking
-                    if(i === item.a) opt.classList.add('correct-answer');
-                    else if(i === userAnswers[qIndex] && !isCorrect) opt.classList.add('wrong-answer');
-                });
-
-                qIndex++;
-                totalQuestions++;
+                if(userAnswers[index] === item.a) {
+                    score++;
+                    if(item.section === 'Grammar') grammarScore++;
+                    if(item.section.includes('Read')) readingScore++;
+                }
             }
         });
 
+        // Generate Feedback
+        let feedback = "";
+        let pct = Math.round((score / 80) * 100);
+        
+        if (pct >= 85) feedback += "🌟 مستوى ممتاز! أنت جاهز للامتحان النهائي.";
+        else if (pct >= 65) feedback += "👍 مستوى جيد، لكن تحتاج لمزيد من التركيز.";
+        else feedback += "⚠️ مستوى يحتاج لتحسين كبير، يجب مراجعة المنهج مرة أخرى.";
+
+        // Specific Feedback
+        feedback += "<br><br><strong>نصائح مخصصة:</strong><ul>";
+        if (grammarScore < 25) feedback += "<li>راجع قواعد النحو (خاصة الوحدات 2 و 3).</li>";
+        if (readingScore < 8) feedback += "<li>تدرب أكثر على القراءة المتحررة والاستنتاج.</li>";
+        feedback += "<li>راجع ورقة إجابتك لمعرفة الأخطاء بالتفصيل.</li></ul>";
+
         // Show Modal
         document.getElementById('finalScore').innerText = score;
-        
-        // Simple Chart
-        const pct = Math.round((score / totalQuestions) * 100);
-        const chartHTML = `
-            <div style="background:#e5e7eb; height:20px; border-radius:10px; overflow:hidden;">
-                <div style="width:${pct}%; background:var(--primary); height:100%;"></div>
-            </div>
-            <p style="margin-top:10px; font-weight:bold;">النسبة المئوية: ${pct}%</p>
-            <p>${pct >= 50 ? 'مبروك! ناجح 🎉' : 'حاول مرة أخرى 💪'}</p>
-        `;
-        document.getElementById('analyticsGraph').innerHTML = chartHTML;
+        document.getElementById('feedbackText').innerHTML = feedback;
         document.getElementById('resultModal').style.display = 'flex';
+    }
+
+    function startReviewMode() {
+        document.getElementById('resultModal').style.display = 'none';
+        document.body.classList.add('review-mode'); // This triggers the CSS to show green/red
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        alert("تم تفعيل وضع المراجعة.\nالإجابة الصحيحة باللون الأخضر.\nإجابتك الخاطئة باللون الأحمر.");
     }
 
     function toggleTheme() {
