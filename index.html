@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0f766e; /* لون الوزارة المائل للأخضر/الأزرق */
+            --primary: #0f766e;
             --primary-dark: #115e59;
             --accent: #f59e0b;
             --bg-body: #f3f4f6;
@@ -21,8 +21,8 @@
             --correct-border: #22c55e;
             --wrong-bg: #fee2e2;
             --wrong-border: #ef4444;
-            --flagged-bg: #fff7ed;
-            --flagged-border: #f97316;
+            --flag-color: #ef4444;
+            --flag-bg: #fef2f2;
         }
 
         body.dark-mode {
@@ -40,8 +40,8 @@
             --correct-border: #34d399;
             --wrong-bg: #7f1d1d;
             --wrong-border: #f87171;
-            --flagged-bg: #431407;
-            --flagged-border: #fb923c;
+            --flag-color: #f87171;
+            --flag-bg: #450a0a;
         }
 
         * { box-sizing: border-box; transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -96,17 +96,34 @@
         
         .q-card {
             background: var(--bg-card); border-radius: 10px; padding: 20px; margin-bottom: 20px;
-            border: 1px solid var(--border); position: relative;
+            border: 1px solid var(--border); position: relative; transition: all 0.3s ease;
         }
-        
-        /* Flag Button */
+
+        /* --- New Flag Styles (التعديل الجديد) --- */
+        /* Flag Button Styling */
         .flag-toggle {
             position: absolute; top: 15px; left: 15px; background: transparent; border: none;
-            color: var(--text-light); cursor: pointer; font-size: 1.2rem; z-index: 2;
+            color: var(--text-light); cursor: pointer; font-size: 1.4rem; z-index: 2;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.5;
         }
-        .flag-toggle.active { color: var(--accent); }
+        .flag-toggle:hover { opacity: 1; transform: scale(1.1); }
+        
+        /* Active Flag State (Button) */
+        .flag-toggle.active {
+            color: var(--flag-color);
+            opacity: 1;
+            transform: scale(1.2);
+            filter: drop-shadow(0 2px 4px rgba(239, 68, 68, 0.3));
+        }
 
-        .q-text { font-size: 1.15rem; font-weight: 700; margin: 10px 0 20px; padding-left: 30px; line-height: 1.6; }
+        /* Active Flag State (Card) - تمييز الكارت بالكامل */
+        .q-card.flagged-card {
+            border-color: var(--flag-color);
+            background-color: var(--flag-bg);
+            box-shadow: 0 0 0 1px var(--flag-color), 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .q-text { font-size: 1.15rem; font-weight: 700; margin: 10px 0 20px; padding-left: 35px; line-height: 1.6; }
 
         /* Options */
         .option {
@@ -174,7 +191,7 @@
             background: var(--bg-body); font-size: 0.9rem;
         }
         .bubble.answered { background: var(--primary); color: white; border-color: var(--primary); }
-        .bubble.flagged { background: var(--accent); color: white; border-color: var(--accent); }
+        .bubble.flagged { background: var(--flag-color); color: white; border-color: var(--flag-color); }
 
         /* Result Modal */
         .result-modal {
@@ -498,8 +515,18 @@
     }
 
     function toggleFlag(qIdx) {
-        if(flaggedQuestions.has(qIdx)) flaggedQuestions.delete(qIdx);
-        else flaggedQuestions.add(qIdx);
+        const btn = document.getElementById(`flag-${qIdx}`);
+        const card = document.getElementById(`q-card-${qIdx}`);
+        
+        if(flaggedQuestions.has(qIdx)) {
+            flaggedQuestions.delete(qIdx);
+            btn.classList.remove('active');
+            card.classList.remove('flagged-card');
+        } else {
+            flaggedQuestions.add(qIdx);
+            btn.classList.add('active');
+            card.classList.add('flagged-card');
+        }
         saveProgress();
         updateUI();
     }
@@ -523,9 +550,15 @@
             }
             // Flag style
             const flagBtn = document.getElementById(`flag-${qIdx}`);
-            if(flagBtn) {
-                if(flaggedQuestions.has(qIdx)) flagBtn.classList.add('active');
-                else flagBtn.classList.remove('active');
+            const card = document.getElementById(`q-card-${qIdx}`);
+            if(flagBtn && card) {
+                if(flaggedQuestions.has(qIdx)) {
+                    flagBtn.classList.add('active');
+                    card.classList.add('flagged-card');
+                } else {
+                    flagBtn.classList.remove('active');
+                    card.classList.remove('flagged-card');
+                }
             }
         });
 
@@ -577,7 +610,7 @@
         const el = document.getElementById(`q-card-${idx}`);
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
         // Highlight temporarily
-        el.style.boxShadow = "0 0 0 2px var(--accent)";
+        el.style.boxShadow = "0 0 0 4px var(--accent)";
         setTimeout(() => el.style.boxShadow = "none", 1000);
     }
 
